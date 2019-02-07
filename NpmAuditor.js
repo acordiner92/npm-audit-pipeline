@@ -1,3 +1,8 @@
+/**
+ *
+ * Handles the overall pipeline auditing process
+ *
+ */
 const NpmAuditor = ({
   npmAuditParser,
   auditPipeline,
@@ -5,6 +10,12 @@ const NpmAuditor = ({
   logger,
   process
 }) => {
+  /**
+   * Runs the pipeline audit process
+   *
+   * @param {string} stdout stdout coming from command line
+   * @returns process exits
+   */
   const runAudit = stdout => {
     const argsConfig = argsParser.parseCommandLineArgs(process.argv.splice(2));
     const vulnerabilites = npmAuditParser.getVulnerabilities(stdout);

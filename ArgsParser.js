@@ -1,3 +1,8 @@
+/**
+ *
+ * Handles the parsing of arguments from command line
+ *
+ */
 const ArgsParser = () => {
   const defaultConfig = {
     low: 0,
@@ -20,6 +25,13 @@ const ArgsParser = () => {
     };
   };
 
+  /**
+   * Builds an pipeline configuration from list of command
+   * line arguements
+   *
+   * @param {Array} args arguments from command line
+   * @returns {object} a pipeline configuration
+   */
   const parseCommandLineArgs = args => {
     const areFlagsValid = args.every(x => isArgsValid(x));
     if (!areFlagsValid) {
