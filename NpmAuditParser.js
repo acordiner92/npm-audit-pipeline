@@ -1,9 +1,9 @@
-const NpmAuditParser = () => {
+const NpmAuditParser = ({ jsonParser }) => {
   const getVulnerabilities = auditResult => {
     if (typeof auditResult !== 'string') {
       throw new Error('Json result provided is not a valid json string');
     }
-    const result = JSON.parse(auditResult);
+    const result = jsonParser.parse(auditResult);
     const {
       metadata: { vulnerabilities }
     } = result;

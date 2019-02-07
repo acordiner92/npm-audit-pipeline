@@ -4,7 +4,7 @@ const AuditPipeline = require('./AuditPipeline');
 const ArgsParser = require('./ArgsParser');
 const NpmAuditor = require('./NpmAuditor');
 
-const npmAuditParser = NpmAuditParser();
+const npmAuditParser = NpmAuditParser({ jsonParser: JSON });
 const auditPipeline = AuditPipeline();
 const argsParser = ArgsParser();
 
