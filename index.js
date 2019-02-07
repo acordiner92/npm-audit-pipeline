@@ -1,17 +1,18 @@
 const { exec } = require('child_process');
-const AuditJsonParser = require('./NpmAuditParser');
+const NpmAuditParser = require('./NpmAuditParser');
 const AuditPipeline = require('./AuditPipeline');
 const ArgsParser = require('./ArgsParser');
+const NpmAuditor = require('./NpmAuditor');
 
-const auditJsonParser = AuditJsonParser();
+const npmAuditParser = NpmAuditParser();
 const auditPipeline = AuditPipeline();
 const argsParser = ArgsParser();
 
 const npmAuditor = NpmAuditor({
-  auditJsonParser,
+  npmAuditParser,
   auditPipeline,
   argsParser,
-  logger: console.log,
+  logger: console,
   process
 });
 

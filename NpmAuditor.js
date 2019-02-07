@@ -5,8 +5,9 @@ const NpmAuditor = ({ npmAuditParser, auditPipeline, argsParser, logger, process
       return process.exit(1);
     }
 
+    const argsConfig = argsParser.parseCommandLineArgs(process.argv.splice(2));
     const vulnerabilites = npmAuditParser.getVulnerabilities(stdout);
-    const results = auditPipeline.determineVulnerabilites({ high: 5 }, vulnerabilites);
+    const results = auditPipeline.checkVulnerabilites(argsConfig, vulnerabilites);
 
     if (results.length) {
       results.map(x => {
