@@ -27,8 +27,12 @@ const NpmAuditor = ({
     if (failedResults.length) {
       failedResults.forEach(x => {
         const { level, expectCount, actualCount } = x;
+
+        logger.error('\x1b[31m', '\x1b[40m', 'NPM AUDIT FAILED');
         logger.error(
-          `NPM audit failed. Expect for level ${level}, vulnerabilites expected ${expectCount} but got ${actualCount}`
+          '\x1b[0m',
+          '\x1b[33m',
+          `For level: ${level}, the expected vulnerabilites should be ${expectCount} but got ${actualCount}\n`
         );
       });
       return process.exit(1);
