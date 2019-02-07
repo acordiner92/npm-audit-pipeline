@@ -5,21 +5,16 @@ const NpmAuditor = ({
   logger,
   process
 }) => {
-  const runAudit = (error, stdout) => {
-    if (error) {
-      logger.error(`failed to run child process error: ${error}`);
-      return process.exit(1);
-    }
-
+  const runAudit = stdout => {
     const argsConfig = argsParser.parseCommandLineArgs(process.argv.splice(2));
     const vulnerabilites = npmAuditParser.getVulnerabilities(stdout);
-    const results = auditPipeline.checkVulnerabilites(
+    const failedResults = auditPipeline.checkVulnerabilites(
       argsConfig,
       vulnerabilites
     );
 
-    if (results.length) {
-      results.forEach(x => {
+    if (failedResults.length) {
+      failedResults.forEach(x => {
         const { level, expectCount, actualCount } = x;
         logger.error(
           `NPM audit failed. Expect for level ${level}, vulnerabilites expected ${expectCount} but got ${actualCount}`

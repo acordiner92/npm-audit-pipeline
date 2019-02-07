@@ -17,4 +17,10 @@ const npmAuditor = NpmAuditor({
 });
 
 // initialisation of app
-exec(`npm audit --json`, (...args) => npmAuditor.runAudit(...args));
+exec(`npm audit --json`, (error, stdOut) => {
+  if (error) {
+    console.log.error(`failed to run child process error: ${error}`);
+    return process.exit(1);
+  }
+  return npmAuditor.runAudit(stdOut);
+});
