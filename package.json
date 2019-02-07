@@ -12,6 +12,13 @@
       "pre-commit": "npm run code-check"
     }
   },
+  "keywords": [
+    "pipeline",
+    "npm",
+    "audit",
+    "security",
+    "package"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/acac99/npm-audit-pipeline.git"
