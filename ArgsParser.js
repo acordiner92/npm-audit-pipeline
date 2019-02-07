@@ -7,11 +7,11 @@ const ArgsParser = () => {
   };
 
   const parseFlag = flagArg => {
-    const val = flagArg.subString(2);
+    const val = flagArg.substring(2);
     const [name, count] = val.split('=');
     return {
       name,
-      count
+      count: parseInt(count)
     };
   };
 
@@ -21,7 +21,7 @@ const ArgsParser = () => {
       const conf = {
         ...prev
       };
-      conf[flag.name] = flag.value;
+      conf[flag.name] = flag.count;
       return conf;
     }, defaultConfig);
     return config;
