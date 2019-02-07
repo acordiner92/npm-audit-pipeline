@@ -1,0 +1,19 @@
+{
+  "name": "npm-audit-pipeline",
+  "version": "0.0.1",
+  "description": "Using npm audit in deployment pipelines",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acac99/npm-audit-pipeline.git"
+  },
+  "author": "Andrew",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/acac99/npm-audit-pipeline/issues"
+  },
+  "homepage": "https://github.com/acac99/npm-audit-pipeline#readme"
+}
