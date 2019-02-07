@@ -1,4 +1,10 @@
-const NpmAuditor = ({ npmAuditParser, auditPipeline, argsParser, logger, process }) => {
+const NpmAuditor = ({
+  npmAuditParser,
+  auditPipeline,
+  argsParser,
+  logger,
+  process
+}) => {
   const runAudit = (error, stdout) => {
     if (error) {
       logger.error(`failed to run child process error: ${error}`);
@@ -7,10 +13,13 @@ const NpmAuditor = ({ npmAuditParser, auditPipeline, argsParser, logger, process
 
     const argsConfig = argsParser.parseCommandLineArgs(process.argv.splice(2));
     const vulnerabilites = npmAuditParser.getVulnerabilities(stdout);
-    const results = auditPipeline.checkVulnerabilites(argsConfig, vulnerabilites);
+    const results = auditPipeline.checkVulnerabilites(
+      argsConfig,
+      vulnerabilites
+    );
 
     if (results.length) {
-      results.map(x => {
+      results.forEach(x => {
         const { level, expectCount, actualCount } = x;
         logger.error(
           `NPM audit failed. Expect for level ${level}, vulnerabilites expected ${expectCount} but got ${actualCount}`

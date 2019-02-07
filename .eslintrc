@@ -1,0 +1,22 @@
+{
+  "extends": ["airbnb-base", "plugin:prettier/recommended"],
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 9,
+    "sourceType": "module"
+  },
+  "rules": {
+    "arrow-body-style": "off",
+    "arrow-parens": "off",
+    "comma-dangle": "off",
+    "consistent-return": "off",
+    "indent": "off",
+    "prefer-template": "off",
+    "no-underscore-dangle": "off",
+    "function-paren-newline": 0
+  }
+}

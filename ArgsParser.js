@@ -11,7 +11,7 @@ const ArgsParser = () => {
     const [name, count] = val.split('=');
     return {
       name,
-      count: parseInt(count)
+      count: parseInt(count, 10)
     };
   };
 
