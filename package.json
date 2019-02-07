@@ -15,5 +15,6 @@
   "bugs": {
     "url": "https://github.com/acac99/npm-audit-pipeline/issues"
   },
-  "homepage": "https://github.com/acac99/npm-audit-pipeline#readme"
+  "homepage": "https://github.com/acac99/npm-audit-pipeline#readme",
+  "dependencies": {}
 }
