@@ -6,6 +6,11 @@ const ArgsParser = () => {
     critical: 0
   };
 
+  const isArgsValid = flagArg => {
+    const pattern = new RegExp(/^--\w+=[0-9]+$/);
+    return pattern.test(flagArg);
+  };
+
   const parseFlag = flagArg => {
     const val = flagArg.substring(2);
     const [name, count] = val.split('=');
@@ -16,12 +21,20 @@ const ArgsParser = () => {
   };
 
   const parseCommandLineArgs = args => {
+    const areFlagsValid = args.every(x => isArgsValid(x));
+    if (!areFlagsValid) {
+      throw new Error('one of the arguments is invalid');
+    }
     const config = args.reduce((prev, curr) => {
       const flag = parseFlag(curr);
       const conf = {
         ...prev
       };
-      conf[flag.name] = flag.count;
+
+      if (conf[flag.name] || conf[flag.name] === 0) {
+        conf[flag.name] = flag.count;
+      }
+
       return conf;
     }, defaultConfig);
     return config;
