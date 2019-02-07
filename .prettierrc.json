@@ -6,5 +6,6 @@
   "semi": true,
   "requirePragma": false,
   "proseWrap": "always",
-  "printWidth": 80
+  "printWidth": 80,
+  "parser": "babel"
 }
