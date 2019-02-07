@@ -19,6 +19,9 @@
     "security",
     "package"
   ],
+  "bin": {
+    "npm-audit": "./index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/acac99/npm-audit-pipeline.git"
