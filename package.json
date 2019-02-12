@@ -7,6 +7,9 @@
     "code-check": "eslint ./ && prettier --write",
     "test": "mocha"
   },
+  "engines": {
+    "npm": ">=6.0.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run code-check"
