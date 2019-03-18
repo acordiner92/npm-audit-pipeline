@@ -17,6 +17,9 @@ const NpmAuditor = ({
    * @returns process exits
    */
   const runAudit = stdout => {
+    if (!stdout) {
+      throw Error('Failed to retrieve audit results from NPM audit');
+    }
     const argsConfig = argsParser.parseCommandLineArgs(process.argv.splice(2));
     const vulnerabilities = npmAuditParser.getVulnerabilities(stdout);
     const failedResults = auditPipeline.checkVulnerabilities(

@@ -3,6 +3,38 @@ const NpmAuditor = require('../NpmAuditor');
 
 describe('NpmAuditor', () => {
   describe('runAudit', () => {
+    it('check error is thrown if stdout is empty', () => {
+      const argsParser = {
+        parseCommandLineArgs: () => ({})
+      };
+      const npmAuditParser = {
+        getVulnerabilities: () => {}
+      };
+      const auditPipeline = {
+        checkVulnerabilities: () => []
+      };
+      const logger = {
+        info: () => {},
+        error: () => {}
+      };
+      const process = {
+        argv: ['nodePath', 'filePath', '--low=3'],
+        exit: () => {}
+      };
+      const npmAuditor = NpmAuditor({
+        npmAuditParser,
+        argsParser,
+        auditPipeline,
+        logger,
+        process
+      });
+
+      expect(() => npmAuditor.runAudit()).to.throw(
+        Error,
+        'Failed to retrieve audit results from NPM audit'
+      );
+    });
+
     it('check only the flag args are being passed into argsParser', () => {
       let argsParam;
       const argsParser = {
