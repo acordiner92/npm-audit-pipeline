@@ -2,10 +2,10 @@ const { expect } = require('chai');
 const AuditPipeline = require('../AuditPipeline');
 
 describe('AuditPipeline', () => {
-  describe('checkVulnerabilites', () => {
-    it('if the vulnerabilites for low is greater than config, then a vulnerable result is returned', () => {
+  describe('checkVulnerabilities', () => {
+    it('if the vulnerabilities for low is greater than config, then a vulnerable result is returned', () => {
       const auditPipeline = AuditPipeline();
-      const result = auditPipeline.checkVulnerabilites(
+      const result = auditPipeline.checkVulnerabilities(
         {
           low: 4
         },
@@ -20,9 +20,9 @@ describe('AuditPipeline', () => {
       ]);
     });
 
-    it('if the vulnerabilites for low is less than config, then no vulnerable result is returned', () => {
+    it('if the vulnerabilities for low is less than config, then no vulnerable result is returned', () => {
       const auditPipeline = AuditPipeline();
-      const result = auditPipeline.checkVulnerabilites(
+      const result = auditPipeline.checkVulnerabilities(
         {
           low: 4
         },

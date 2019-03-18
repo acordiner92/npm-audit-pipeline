@@ -7,6 +7,7 @@ describe('ArgsParser', () => {
       const argsParser = ArgsParser();
       const result = argsParser.parseCommandLineArgs([]);
       expect(result).to.eql({
+        shouldWarn: false,
         low: 0,
         moderate: 0,
         high: 0,
@@ -26,6 +27,7 @@ describe('ArgsParser', () => {
       const argsParser = ArgsParser();
       const result = argsParser.parseCommandLineArgs(['--low=3']);
       expect(result).to.eql({
+        shouldWarn: false,
         low: 3,
         moderate: 0,
         high: 0,
@@ -33,10 +35,11 @@ describe('ArgsParser', () => {
       });
     });
 
-    it('if arg is unknown type, then it is ignored', () => {
+    it('if arg is has --warn, then shouldWarn should be true', () => {
       const argsParser = ArgsParser();
-      const result = argsParser.parseCommandLineArgs(['--random=3']);
+      const result = argsParser.parseCommandLineArgs(['--warn']);
       expect(result).to.eql({
+        shouldWarn: true,
         low: 0,
         moderate: 0,
         high: 0,

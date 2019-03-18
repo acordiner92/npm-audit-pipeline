@@ -6,18 +6,18 @@
  */
 const AuditPipeline = () => {
   /**
-   * Determines if any of the vulnernability criteria
+   * Determines if any of the vulnerability criteria
    * fails or not and returns all the failed results
    *
    * @param {object} argsConfig
-   * @param {object} vulnerabilites
-   * @returns {Array} failed vulnernability results
+   * @param {object} vulnerabilities
+   * @returns {Array} failed vulnerability results
    */
-  const checkVulnerabilites = (argsConfig, vulnerabilites) => {
+  const checkVulnerabilities = (argsConfig, vulnerabilities) => {
     const results = Object.entries(argsConfig)
-      .filter(([level, size]) => vulnerabilites[level] > size)
+      .filter(([level, size]) => vulnerabilities[level] > size)
       .map(([level, expectCount]) => {
-        const actualCount = vulnerabilites[level];
+        const actualCount = vulnerabilities[level];
         return {
           level,
           expectCount,
@@ -28,7 +28,7 @@ const AuditPipeline = () => {
   };
 
   return {
-    checkVulnerabilites
+    checkVulnerabilities
   };
 };
 module.exports = AuditPipeline;

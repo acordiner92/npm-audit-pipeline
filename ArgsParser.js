@@ -4,7 +4,10 @@
  *
  */
 const ArgsParser = () => {
+  const vulnerabilityFlagRegex = /^--(low|moderate|high|critical)=[0-9]+$/;
+
   const defaultConfig = {
+    shouldWarn: false,
     low: 0,
     moderate: 0,
     high: 0,
@@ -12,12 +15,14 @@ const ArgsParser = () => {
   };
 
   const isArgsValid = flagArg => {
-    const pattern = new RegExp(/^--\w+=[0-9]+$/);
+    const pattern = new RegExp(/--\w+/);
     return pattern.test(flagArg);
   };
 
   const parseFlag = flagArg => {
-    const val = flagArg.substring(2);
+    const pattern = new RegExp(vulnerabilityFlagRegex);
+    const [flag] = pattern.exec(flagArg);
+    const val = flag.substring(2);
     const [name, count] = val.split('=');
     return {
       name,
@@ -27,7 +32,7 @@ const ArgsParser = () => {
 
   /**
    * Builds an pipeline configuration from list of command
-   * line arguements
+   * line arguments
    *
    * @param {Array} args arguments from command line
    * @returns {object} a pipeline configuration
@@ -37,19 +42,21 @@ const ArgsParser = () => {
     if (!areFlagsValid) {
       throw new Error('one of the arguments is invalid');
     }
-    const config = args.reduce((prev, curr) => {
-      const flag = parseFlag(curr);
-      const conf = {
-        ...prev
-      };
+    const config = args
+      .filter(x => x.match(vulnerabilityFlagRegex))
+      .reduce((prev, curr) => {
+        const flag = parseFlag(curr);
+        const conf = {
+          ...prev
+        };
 
-      if (conf[flag.name] || conf[flag.name] === 0) {
-        conf[flag.name] = flag.count;
-      }
+        if (conf[flag.name] || conf[flag.name] === 0) {
+          conf[flag.name] = flag.count;
+        }
 
-      return conf;
-    }, defaultConfig);
-    return config;
+        return conf;
+      }, defaultConfig);
+    return { ...config, shouldWarn: args.some(x => x === '--warn') };
   };
 
   return {

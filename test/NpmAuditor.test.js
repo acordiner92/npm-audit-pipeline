@@ -8,13 +8,14 @@ describe('NpmAuditor', () => {
       const argsParser = {
         parseCommandLineArgs: args => {
           argsParam = args;
+          return {};
         }
       };
       const npmAuditParser = {
         getVulnerabilities: () => {}
       };
       const auditPipeline = {
-        checkVulnerabilites: () => []
+        checkVulnerabilities: () => []
       };
       const logger = {
         info: () => {},
@@ -38,13 +39,13 @@ describe('NpmAuditor', () => {
 
     it('if there a failed vulnerabilities (aka failed check) then process is exited with 1', () => {
       const argsParser = {
-        parseCommandLineArgs: () => {}
+        parseCommandLineArgs: () => ({})
       };
       const npmAuditParser = {
         getVulnerabilities: () => {}
       };
       const auditPipeline = {
-        checkVulnerabilites: () => [
+        checkVulnerabilities: () => [
           {
             level: 'low',
             expectCount: 0,
@@ -58,7 +59,7 @@ describe('NpmAuditor', () => {
       };
       let exitCodeParam;
       const process = {
-        argv: ['nodePath', 'filePath', '--low=3'],
+        argv: ['nodePath', 'filePath'],
         exit: exitCode => {
           exitCodeParam = exitCode;
         }
@@ -75,15 +76,56 @@ describe('NpmAuditor', () => {
       expect(exitCodeParam).to.eql(1);
     });
 
-    it('if there a no failed vulnerabilities then process is exited with 0', () => {
+    it('if there a failed vulnerabilities but warn flag is enabled then it should exit with 0', () => {
       const argsParser = {
-        parseCommandLineArgs: () => {}
+        parseCommandLineArgs: () => ({
+          shouldWarn: true
+        })
       };
       const npmAuditParser = {
         getVulnerabilities: () => {}
       };
       const auditPipeline = {
-        checkVulnerabilites: () => []
+        checkVulnerabilities: () => [
+          {
+            level: 'low',
+            expectCount: 0,
+            actualCount: 1
+          }
+        ]
+      };
+      const logger = {
+        info: () => {},
+        error: () => {}
+      };
+      let exitCodeParam;
+      const process = {
+        argv: ['nodePath', 'filePath', '--warn'],
+        exit: exitCode => {
+          exitCodeParam = exitCode;
+        }
+      };
+      const npmAuditor = NpmAuditor({
+        npmAuditParser,
+        argsParser,
+        auditPipeline,
+        logger,
+        process
+      });
+
+      npmAuditor.runAudit('someunparsedJson');
+      expect(exitCodeParam).to.eql(0);
+    });
+
+    it('if there a no failed vulnerabilities then process is exited with 0', () => {
+      const argsParser = {
+        parseCommandLineArgs: () => ({})
+      };
+      const npmAuditParser = {
+        getVulnerabilities: () => {}
+      };
+      const auditPipeline = {
+        checkVulnerabilities: () => []
       };
       const logger = {
         info: () => {},

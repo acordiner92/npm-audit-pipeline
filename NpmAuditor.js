@@ -18,23 +18,24 @@ const NpmAuditor = ({
    */
   const runAudit = stdout => {
     const argsConfig = argsParser.parseCommandLineArgs(process.argv.splice(2));
-    const vulnerabilites = npmAuditParser.getVulnerabilities(stdout);
-    const failedResults = auditPipeline.checkVulnerabilites(
+    const vulnerabilities = npmAuditParser.getVulnerabilities(stdout);
+    const failedResults = auditPipeline.checkVulnerabilities(
       argsConfig,
-      vulnerabilites
+      vulnerabilities
     );
 
-    if (failedResults.length) {
-      failedResults.forEach(x => {
-        const { level, expectCount, actualCount } = x;
+    failedResults.forEach(x => {
+      const { level, expectCount, actualCount } = x;
 
-        logger.error('\x1b[31m', '\x1b[40m', 'NPM AUDIT FAILED');
-        logger.error(
-          '\x1b[0m',
-          '\x1b[33m',
-          `For level: ${level}, the expected vulnerabilites should be ${expectCount} but got ${actualCount}\n`
-        );
-      });
+      logger.error('\x1b[31m', '\x1b[40m', 'NPM AUDIT FAILED');
+      logger.error(
+        '\x1b[0m',
+        '\x1b[33m',
+        `For level: ${level}, the expected vulnerabilities should be ${expectCount} but got ${actualCount}\n`
+      );
+    });
+
+    if (failedResults.length && !argsConfig.shouldWarn) {
       return process.exit(1);
     }
 

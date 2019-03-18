@@ -6,7 +6,7 @@
  */
 const NpmAuditParser = ({ jsonParser }) => {
   /**
-   * Gets all the vulernabilities from
+   * Gets all the vulnerabilities from
    * npm audit
    *
    * @param {string} stdout stdout from command line
