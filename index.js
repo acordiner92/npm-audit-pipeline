@@ -1,21 +1,26 @@
 #!/usr/bin/env node
 const { exec } = require('child_process');
-const NpmAuditParser = require('./NpmAuditParser');
 const AuditPipeline = require('./AuditPipeline');
 const ArgsParser = require('./ArgsParser');
 const NpmAuditor = require('./NpmAuditor');
+const Executor = require('./executor');
 
-const npmAuditParser = NpmAuditParser({ jsonParser: JSON });
 const auditPipeline = AuditPipeline();
 const argsParser = ArgsParser();
 
+const executor = Executor({
+  exec,
+  jsonParser: JSON,
+  logger: console
+});
+
 const npmAuditor = NpmAuditor({
-  npmAuditParser,
   auditPipeline,
   argsParser,
   logger: console,
-  process
+  process,
+  executor
 });
 
 // initialisation of app
-exec(`npm audit --json`, (error, stdOut) => npmAuditor.runAudit(stdOut));
+npmAuditor.runAudit();

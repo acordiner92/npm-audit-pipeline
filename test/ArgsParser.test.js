@@ -11,7 +11,8 @@ describe('ArgsParser', () => {
         low: 0,
         moderate: 0,
         high: 0,
-        critical: 0
+        critical: 0,
+        retry: 3
       });
     });
 
@@ -31,7 +32,8 @@ describe('ArgsParser', () => {
         low: 3,
         moderate: 0,
         high: 0,
-        critical: 0
+        critical: 0,
+        retry: 3
       });
     });
 
@@ -43,7 +45,21 @@ describe('ArgsParser', () => {
         low: 0,
         moderate: 0,
         high: 0,
-        critical: 0
+        critical: 0,
+        retry: 3
+      });
+    });
+
+    it('if arg is has --retry=5, then retry should be 5', () => {
+      const argsParser = ArgsParser();
+      const result = argsParser.parseCommandLineArgs(['--retry=5']);
+      expect(result).to.eql({
+        shouldWarn: false,
+        low: 0,
+        moderate: 0,
+        high: 0,
+        critical: 0,
+        retry: 5
       });
     });
   });

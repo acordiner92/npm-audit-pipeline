@@ -4,10 +4,11 @@
  *
  */
 const ArgsParser = () => {
-  const vulnerabilityFlagRegex = /^--(low|moderate|high|critical)=[0-9]+$/;
+  const vulnerabilityFlagRegex = /^--(low|moderate|high|critical|retry)=[0-9]+$/;
 
   const defaultConfig = {
     shouldWarn: false,
+    retry: 3,
     low: 0,
     moderate: 0,
     high: 0,
@@ -56,7 +57,10 @@ const ArgsParser = () => {
 
         return conf;
       }, defaultConfig);
-    return { ...config, shouldWarn: args.some(x => x === '--warn') };
+    return {
+      ...config,
+      shouldWarn: args.some(x => x === '--warn')
+    };
   };
 
   return {
