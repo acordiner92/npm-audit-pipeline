@@ -54,6 +54,77 @@ describe('NpmAuditor', () => {
       expect(argsParam).to.eql(['--low=3']);
     });
 
+    it('check only the vulnerabilities are being passed into auditPipeline.checkVulnerabilities', async () => {
+      const argsParser = {
+        parseCommandLineArgs: () => ({})
+      };
+      let vulnerabilitiesParam;
+      const auditPipeline = {
+        checkVulnerabilities: (config, vulnerabilities) => {
+          vulnerabilitiesParam = vulnerabilities;
+          return [];
+        }
+      };
+      const logger = {
+        info: () => {},
+        error: () => {}
+      };
+      const process = {
+        argv: ['nodePath', 'filePath', '--low=3'],
+        exit: () => {}
+      };
+      const executor = {
+        runNpmAuditCommand: () => examplePayload
+      };
+
+      const npmAuditor = NpmAuditor({
+        argsParser,
+        auditPipeline,
+        logger,
+        process,
+        executor
+      });
+
+      await npmAuditor.runAudit();
+      expect(vulnerabilitiesParam).to.eql(
+        examplePayload.metadata.vulnerabilities
+      );
+    });
+
+    it('if executor.runNpmAuditCommand fails then process is exited with 1', async () => {
+      const argsParser = {
+        parseCommandLineArgs: () => ({})
+      };
+      const auditPipeline = {
+        checkVulnerabilities: () => []
+      };
+      const logger = {
+        info: () => {},
+        error: () => {}
+      };
+      let exitCodeParam;
+      const process = {
+        argv: ['nodePath', 'filePath'],
+        exit: exitCode => {
+          exitCodeParam = exitCode;
+        }
+      };
+      const executor = {
+        runNpmAuditCommand: () =>
+          Promise.reject(new Error('Failed to get npm audit'))
+      };
+      const npmAuditor = NpmAuditor({
+        argsParser,
+        auditPipeline,
+        logger,
+        process,
+        executor
+      });
+
+      await npmAuditor.runAudit();
+      expect(exitCodeParam).to.eql(1);
+    });
+
     it('if there a failed vulnerabilities (aka failed check) then process is exited with 1', async () => {
       const argsParser = {
         parseCommandLineArgs: () => ({})

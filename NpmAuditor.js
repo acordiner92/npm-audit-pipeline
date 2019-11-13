@@ -17,6 +17,9 @@ const NpmAuditor = ({
     return vulnerabilities;
   };
 
+  const hasAuditFailed = (failedResults, argsConfig) =>
+    failedResults.length && !argsConfig.shouldWarn;
+
   /**
    * Runs the pipeline audit process
    *
@@ -43,7 +46,7 @@ const NpmAuditor = ({
         );
       });
 
-      if (failedResults.length && !argsConfig.shouldWarn) {
+      if (hasAuditFailed(failedResults, argsConfig)) {
         return process.exit(1);
       }
 
