@@ -4,15 +4,14 @@
  *
  */
 const Executor = ({ exec, jsonParser, logger }) => {
-  const exceededRetries = (parsedStdOut, retries, retry) =>
-    parsedStdOut.error && retries >= retry;
+  const exceededRetries = (retry, retries) => retries >= retry;
 
   const callNpm = async (retry, retries) =>
     new Promise((resolve, reject) => {
       exec('npm audit --json', (error, stdOut) => {
         const parsedStdOut = jsonParser.parse(stdOut);
         if (error || parsedStdOut.error) {
-          if (exceededRetries(parsedStdOut, retries, retry)) {
+          if (exceededRetries(retry, retries)) {
             logger.error(`Failed to fetch NPM audit after ${retry} retries`);
             return reject(parsedStdOut.error || error);
           }
