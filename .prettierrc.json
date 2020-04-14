@@ -7,5 +7,6 @@
   "requirePragma": false,
   "proseWrap": "always",
   "printWidth": 80,
-  "parser": "babel"
+  "parser": "babel",
+  "arrowParens": "avoid"
 }
