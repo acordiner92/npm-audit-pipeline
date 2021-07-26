@@ -45,7 +45,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.1",
     "husky": "^4.2.5",
-    "mocha": "^8.0.1",
+    "mocha": "^9.0.3",
     "prettier": "^2.0.4"
   }
 }
