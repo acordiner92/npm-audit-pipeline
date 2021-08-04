@@ -8,7 +8,7 @@ const Executor = ({ exec, jsonParser, logger }) => {
 
   const callNpm = async (retry, retries) =>
     new Promise((resolve, reject) => {
-      exec('npm audit --json | cat', (error, stdOut) => {
+      exec('npm audit --json || cat', (error, stdOut) => {
         const parsedStdOut = jsonParser.parse(stdOut);
         if (error || parsedStdOut.error) {
           if (exceededRetries(retry, retries)) {

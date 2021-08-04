@@ -42,7 +42,7 @@ describe('executor', () => {
       const executor = Executor({ exec, logger, jsonParser });
 
       await executor.runNpmAuditCommand({ retry: 1 });
-      expect(commandParams).to.equal('npm audit --json');
+      expect(commandParams).to.equal('npm audit --json || cat');
     });
 
     it('check the parsed npm audit json is returned', async () => {

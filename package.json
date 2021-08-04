@@ -10,11 +10,6 @@
   "engines": {
     "npm": ">=6.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run code-check"
-    }
-  },
   "keywords": [
     "pipeline",
     "npm",
@@ -35,7 +30,6 @@
     "url": "https://github.com/acac99/npm-audit-pipeline/issues"
   },
   "homepage": "https://github.com/acac99/npm-audit-pipeline#readme",
-  "dependencies": {},
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
@@ -44,8 +38,8 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-prettier": "^3.0.1",
-    "husky": "^4.2.5",
-    "mocha": "^8.0.1",
+    "husky": "^7.0.1",
+    "mocha": "^9.0.3",
     "prettier": "^2.0.4"
   }
 }
