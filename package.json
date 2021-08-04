@@ -4,6 +4,7 @@
   "description": "Using npm audit in deployment pipelines",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon",
     "code-check": "eslint ./ && prettier --write \"./**/*.js\"",
     "test": "mocha"
   },
