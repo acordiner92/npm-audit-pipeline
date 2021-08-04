@@ -1,12 +1,12 @@
 {
-  "singleQuote": true,
-  "trailingComma": "none",
-  "bracketSpacing": true,
-  "jsxBracketSameLine": false,
+  "arrowParens": "avoid",
+  "endOfLine": "lf",
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
   "semi": true,
-  "requirePragma": false,
-  "proseWrap": "always",
+  "trailingComma": "all",
+  "singleQuote": true,
   "printWidth": 80,
-  "parser": "babel",
-  "arrowParens": "avoid"
+  "tabWidth": 2,
+  "useTabs": false
 }

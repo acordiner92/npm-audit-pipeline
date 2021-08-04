@@ -9,9 +9,13 @@ specifiers:
   eslint-config-prettier: ^8.3.0
   eslint-plugin-import: ^2.18.2
   eslint-plugin-prettier: ^3.0.1
+  fp-ts: ^2.11.1
   mocha: ^9.0.3
   prettier: ^2.0.4
   typescript: ^4.3.5
+
+dependencies:
+  fp-ts: 2.11.1
 
 devDependencies:
   chai: 4.3.4
@@ -746,6 +750,10 @@ packages:
   /flatted/3.2.2:
     resolution: {integrity: sha512-JaTY/wtrcSyvXJl4IMFHPKyFur1sE9AUqc0QnhOaJ0CxHtAoIV8pYDzeEfAaNEtGkOfq4gr3LBFmdXW5mOQFnA==}
     dev: true
+
+  /fp-ts/2.11.1:
+    resolution: {integrity: sha512-CJOfs+Heq/erkE5mqH2mhpsxCKABGmcLyeEwPxtbTlkLkItGUs6bmk2WqjB2SgoVwNwzTE5iKjPQJiq06CPs5g==}
+    dev: false
 
   /fs.realpath/1.0.0:
     resolution: {integrity: sha1-FQStJSMVjKpA20onh8sBQRmU6k8=}
