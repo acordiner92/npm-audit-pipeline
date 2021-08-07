@@ -30,8 +30,11 @@ const defaultConfig: NpmAuditorConfiguration = {
   critical: 0,
 };
 
-const isArgsValid = (flagArg: string): boolean =>
-  new RegExp(/--\w+/).test(flagArg);
+const isArgsValid = (flagArg: string) =>
+  new RegExp(/(^|\s)--[^\d\W]+/).test(flagArg);
+
+const isVulnerabilityFlag = (flagArg: string) =>
+  new RegExp(vulnerabilityFlagRegex).test(flagArg);
 
 const parseVulnerabilityFlagArg = (
   flagArg: string,
@@ -42,7 +45,10 @@ const parseVulnerabilityFlagArg = (
     O.map(x => x.split('=')),
     O.chain(x =>
       sequenceS(O.option)({
-        key: A.lookup(0)(x),
+        key: pipe(
+          A.lookup(0)(x),
+          O.map(x => x.replace('--', '')),
+        ),
         count: pipe(A.lookup(1)(x), O.map(parseInt)),
       }),
     ),
@@ -51,7 +57,8 @@ const parseVulnerabilityFlagArg = (
 
 const parseVulnerabilityFlagArgs = (args: ReadonlyArray<string>) =>
   pipe(
-    args.map(parseVulnerabilityFlagArg),
+    args.filter(isVulnerabilityFlag),
+    A.map(parseVulnerabilityFlagArg),
     E.sequenceArray,
     E.map(x =>
       x.reduce<NpmAuditorConfiguration>(
