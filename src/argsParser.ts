@@ -5,13 +5,13 @@ import { match } from 'fp-ts/boolean';
 import * as A from 'fp-ts/Array';
 import { sequenceS } from 'fp-ts/Apply';
 
-type NpmAuditorConfiguration = {
+export type NpmAuditorConfiguration = {
   shouldWarn: boolean;
-  retry: Number;
-  low: Number;
-  moderate: Number;
-  high: Number;
-  critical: Number;
+  retry: number;
+  low: number;
+  moderate: number;
+  high: number;
+  critical: number;
 };
 
 type VulnerabilityFlag = {
