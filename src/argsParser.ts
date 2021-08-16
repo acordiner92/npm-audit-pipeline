@@ -8,6 +8,7 @@ import { sequenceS } from 'fp-ts/Apply';
 export type NpmAuditorConfiguration = {
   shouldWarn: boolean;
   retry: number;
+  info: number;
   low: number;
   moderate: number;
   high: number;
@@ -24,6 +25,7 @@ const vulnerabilityFlagRegex = /^--(low|moderate|high|critical|retry)=[0-9]+$/;
 const defaultConfig: NpmAuditorConfiguration = {
   shouldWarn: false,
   retry: 3,
+  info: 0,
   low: 0,
   moderate: 0,
   high: 0,

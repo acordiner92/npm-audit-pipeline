@@ -30,7 +30,7 @@ describe('executorResponseHandler', () => {
       ).toStrictEqual(
         E.left(
           new Error(
-            'Invalid value undefined supplied to : { metaData: { vulnerabilities: { info: number, moderate: number, high: number, critical: number } } }/metaData: { vulnerabilities: { info: number, moderate: number, high: number, critical: number } }',
+            'Invalid value undefined supplied to : { metaData: { vulnerabilities: { info: number, low: number, moderate: number, high: number, critical: number } } }/metaData: { vulnerabilities: { info: number, low: number, moderate: number, high: number, critical: number } }',
           ),
         ),
       ));
@@ -43,6 +43,7 @@ describe('executorResponseHandler', () => {
             metaData: {
               vulnerabilities: {
                 info: 0,
+                low: 10,
                 moderate: 2,
                 high: 1,
                 critical: 6,
@@ -55,6 +56,7 @@ describe('executorResponseHandler', () => {
           metaData: {
             vulnerabilities: {
               info: 0,
+              low: 10,
               moderate: 2,
               high: 1,
               critical: 6,

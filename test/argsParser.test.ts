@@ -8,6 +8,7 @@ describe('argsParser', () => {
         E.right({
           shouldWarn: false,
           low: 0,
+          info: 0,
           moderate: 0,
           high: 0,
           critical: 0,
@@ -33,6 +34,7 @@ describe('argsParser', () => {
         E.right({
           shouldWarn: false,
           low: 3,
+          info: 0,
           moderate: 0,
           high: 0,
           critical: 0,
@@ -45,6 +47,7 @@ describe('argsParser', () => {
         E.right({
           shouldWarn: true,
           low: 0,
+          info: 0,
           moderate: 0,
           high: 0,
           critical: 0,
@@ -57,6 +60,7 @@ describe('argsParser', () => {
         E.right({
           shouldWarn: false,
           low: 0,
+          info: 0,
           moderate: 0,
           high: 0,
           critical: 0,

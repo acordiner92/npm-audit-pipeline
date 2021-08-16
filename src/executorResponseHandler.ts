@@ -13,6 +13,7 @@ const NpmAuditResponse = t.type({
   metaData: t.type({
     vulnerabilities: t.type({
       info: t.number,
+      low: t.number,
       moderate: t.number,
       high: t.number,
       critical: t.number,
