@@ -1,6 +1,6 @@
 /* eslint-disable fp/no-nil */
 /* eslint-disable fp/no-unused-expression */
-import E from 'fp-ts/Either';
+import * as E from 'fp-ts/Either';
 import { NpmResponseError } from '../src/errors';
 import { handleExecResponse } from '../src/executorResponseHandler';
 
