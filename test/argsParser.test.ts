@@ -1,3 +1,5 @@
+/* eslint-disable fp/no-nil */
+/* eslint-disable fp/no-unused-expression */
 import { parseCommandLineArgs } from '../src/argsParser';
 import E from 'fp-ts/Either';
 

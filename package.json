@@ -6,10 +6,9 @@
   "scripts": {
     "start": "nodemon",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix",
-    "format": "prettier --check \"src/**/*.{js,jsx,ts,tsx}\"",
-    "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
-    "test": "jest"
+    "lint:fix": "eslint ./ --fix",
+    "format": "prettier --write ./**/*",
+    "test": "jest ./test"
   },
   "engines": {
     "npm": ">=6.0.0"

@@ -1,3 +1,5 @@
+/* eslint-disable fp/no-nil */
+/* eslint-disable fp/no-unused-expression */
 import { evaluateFailedVulnerabilities, Level } from '../src/auditor';
 
 describe('auditor', () => {
@@ -64,7 +66,7 @@ describe('auditor', () => {
     ])(
       'only vulnerabilities with higher that expect config amount are returned',
       (conf, resp, expected) =>
-        expect(evaluateFailedVulnerabilities(conf, resp)).toStrictEqual(
+        expect(evaluateFailedVulnerabilities(conf)(resp)).toStrictEqual(
           expected,
         ),
     );
