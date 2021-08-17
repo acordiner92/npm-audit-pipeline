@@ -5,7 +5,7 @@ module.exports = {
     '^.+\\.(ts|tsx)$': [
       'esbuild-jest',
       {
-        sourcemap: true,
+        // sourcemap: true,
       },
     ],
   },
