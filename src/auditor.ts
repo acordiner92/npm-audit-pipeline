@@ -9,7 +9,7 @@ export enum Level {
   critical = 'critical',
 }
 
-type LevelAudit = {
+export type LevelAudit = {
   level: Level;
   expectedCount: number;
   actualCount: number;
@@ -31,14 +31,13 @@ const npmLevelValues = (npmAuditResponse: NpmAuditResponse) => ({
   [Level.critical]: npmAuditResponse.metaData.vulnerabilities.critical,
 });
 
-export const evaluateFailedVulnerabilities = (
-  config: NpmAuditorConfiguration,
-  npmAuditResponse: NpmAuditResponse,
-): ReadonlyArray<LevelAudit> =>
-  Object.keys(Level)
-    .map(x => ({
-      level: x as Level,
-      expectedCount: configLevelValues(config)[x as Level],
-      actualCount: npmLevelValues(npmAuditResponse)[x as Level],
-    }))
-    .filter(x => x.actualCount > x.expectedCount);
+export const evaluateFailedVulnerabilities =
+  (config: NpmAuditorConfiguration) =>
+  (npmAuditResponse: NpmAuditResponse): ReadonlyArray<LevelAudit> =>
+    Object.keys(Level)
+      .map(x => ({
+        level: x as Level,
+        expectedCount: configLevelValues(config)[x as Level],
+        actualCount: npmLevelValues(npmAuditResponse)[x as Level],
+      }))
+      .filter(x => x.actualCount > x.expectedCount);
