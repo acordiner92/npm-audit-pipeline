@@ -1,13 +1,7 @@
 module.exports = {
-  roots: ['test'],
+  roots: ['<rootDir>/test'],
   testMatch: ['**/?(*.)+(test).+(ts)'],
   transform: {
-    '^.+\\.(ts|tsx)$': [
-      'esbuild-jest',
-      {
-        sourcemap: true,
-      },
-    ],
+    '^.+\\.(ts|tsx)$': 'ts-jest',
   },
-  moduleDirectories: ['test'],
 };
