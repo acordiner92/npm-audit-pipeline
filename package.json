@@ -8,7 +8,7 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./ --fix",
     "format": "prettier --write ./**/*",
-    "test": "jest ./test"
+    "test": "jest"
   },
   "engines": {
     "npm": ">=6.0.0"
@@ -51,7 +51,6 @@
     "jest": "^27.0.6",
     "mocha": "^9.0.3",
     "prettier": "^2.0.4",
-    "source-map-support": "^0.5.19",
     "typescript": "^4.3.5"
   },
   "dependencies": {

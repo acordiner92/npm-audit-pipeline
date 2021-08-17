@@ -21,7 +21,6 @@ specifiers:
   mocha: ^9.0.3
   prettier: ^2.0.4
   retry-ts: ^0.1.3
-  source-map-support: ^0.5.19
   typescript: ^4.3.5
 
 dependencies:
@@ -47,7 +46,6 @@ devDependencies:
   jest: 27.0.6
   mocha: 9.0.3
   prettier: 2.3.2
-  source-map-support: 0.5.19
   typescript: 4.3.5
 
 packages:
