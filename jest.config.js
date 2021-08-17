@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ['<rootDir>/test'],
+  roots: ['test'],
   testMatch: ['**/?(*.)+(test).+(ts)'],
   transform: {
     '^.+\\.(ts|tsx)$': [
@@ -9,5 +9,5 @@ module.exports = {
       },
     ],
   },
-  moduleDirectories: ['<rootDir>/test/'],
+  moduleDirectories: ['test'],
 };
