@@ -1,3 +1,4 @@
 import { runAudit } from './auditPipeline';
 
-runAudit()();
+// eslint-disable-next-line fp/no-unused-expression
+void runAudit()();
