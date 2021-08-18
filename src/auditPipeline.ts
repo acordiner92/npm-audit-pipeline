@@ -1,11 +1,29 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/TaskEither';
-import * as T from 'fp-ts/Task';
+import * as RT from 'fp-ts/ReaderTask';
 import * as IO from 'fp-ts/IO';
 import { info, error } from 'fp-ts/Console';
-import { parseCommandLineArgs } from './argsParser';
+import { NpmAuditorConfiguration, parseCommandLineArgs } from './argsParser';
 import { evaluateFailedVulnerabilities, LevelAudit } from './auditor';
-import { runNpmAuditCommand } from './executor';
+
+type AuditPipelineEnv = {
+  getCommandLineArgs: () => ReadonlyArray<string>;
+  runNpmAuditCommand: (config: NpmAuditorConfiguration) => TE.TaskEither<
+    Error,
+    {
+      metaData: {
+        vulnerabilities: {
+          info: number;
+          low: number;
+          moderate: number;
+          high: number;
+          critical: number;
+        };
+      };
+    }
+  >;
+  exitProcess: (status: number) => never;
+};
 
 const writeVulnerabilityResultToTerminal = (
   failedVulnerabilities: ReadonlyArray<LevelAudit>,
@@ -23,26 +41,35 @@ const writeVulnerabilityResultToTerminal = (
     );
   });
 
-export const runAudit = (): T.Task<void> =>
+export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, void> =>
   pipe(
-    process.argv.slice(2),
-    parseCommandLineArgs,
-    TE.fromEither,
-    TE.chain(config =>
+    RT.ask<AuditPipelineEnv>(),
+    RT.chainTaskK(env =>
       pipe(
-        config,
-        runNpmAuditCommand,
-        TE.map(evaluateFailedVulnerabilities(config)),
-      ),
-    ),
-    TE.fold(
-      error =>
-        pipe(
-          info(`Failed to run npm audit pipeline - Reason: ${error.message}`),
-          process.exit(1),
+        env.getCommandLineArgs(),
+        parseCommandLineArgs,
+        TE.fromEither,
+        TE.chain(config =>
+          pipe(
+            config,
+            env.runNpmAuditCommand,
+            TE.map(evaluateFailedVulnerabilities(config)),
+          ),
         ),
-      flow(writeVulnerabilityResultToTerminal, failedVulnerabilities =>
-        failedVulnerabilities.length ? process.exit(1) : process.exit(0),
+        TE.fold(
+          error =>
+            pipe(
+              info(
+                `Failed to run npm audit pipeline - Reason: ${error.message}`,
+              ),
+              env.exitProcess(1),
+            ),
+          flow(writeVulnerabilityResultToTerminal, failedVulnerabilities =>
+            failedVulnerabilities.length
+              ? env.exitProcess(1)
+              : env.exitProcess(0),
+          ),
+        ),
       ),
     ),
   );

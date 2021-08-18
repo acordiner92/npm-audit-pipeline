@@ -1,6 +1,7 @@
-import { exec } from 'child_process';
+import type { exec } from 'child_process';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
+import * as RTE from 'fp-ts/ReaderTaskEither';
 import { pipe } from 'fp-ts/function';
 import { NpmAuditorConfiguration } from './argsParser';
 import {
@@ -14,31 +15,42 @@ type ChildProcessResponse = {
   stdout: string;
   stderr: string;
 };
+export type ExecutorEnv = {
+  exec: typeof exec;
+};
 
 const policy = (retries: number) =>
   capDelay(2000, Monoid.concat(exponentialBackoff(200), limitRetries(retries)));
 
-const execAsPromise = (command: string): Promise<ChildProcessResponse> =>
+const execAsPromise = (
+  env: ExecutorEnv,
+  command: string,
+): Promise<ChildProcessResponse> =>
   new Promise((resolve, reject) =>
-    exec(command, (error, stdout, stderr) =>
+    env.exec(command, (error, stdout, stderr) =>
       error ? reject(error) : resolve({ stdout, stderr }),
     ),
   );
 export const runNpmAuditCommand = (
   config: NpmAuditorConfiguration,
-): TE.TaskEither<Error, NpmAuditResponse> =>
-  retrying(
-    policy(config.retry),
-    () =>
-      pipe(
-        TE.tryCatch(
-          () => execAsPromise('npm audit --json'),
-          error =>
-            error instanceof Error
-              ? error
-              : new Error('Failed to execute child process command'),
-        ),
-        TE.chainEitherK(handleExecResponse),
+): RTE.ReaderTaskEither<ExecutorEnv, Error, NpmAuditResponse> =>
+  pipe(
+    RTE.ask<ExecutorEnv>(),
+    RTE.chainTaskEitherK(env =>
+      retrying(
+        policy(config.retry),
+        () =>
+          pipe(
+            TE.tryCatch(
+              () => execAsPromise(env, 'npm audit --json'),
+              error =>
+                error instanceof Error
+                  ? error
+                  : new Error('Failed to execute child process command'),
+            ),
+            TE.chainEitherK(handleExecResponse),
+          ),
+        E.isLeft,
       ),
-    E.isLeft,
+    ),
   );
