@@ -1,4 +1,4 @@
-import type { exec } from 'child_process';
+import type { ExecException } from 'child_process';
 import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import * as RTE from 'fp-ts/ReaderTaskEither';
@@ -16,7 +16,14 @@ type ChildProcessResponse = {
   stderr: string;
 };
 export type ExecutorEnv = {
-  exec: typeof exec;
+  exec: (
+    command: string,
+    callback: (
+      error: ExecException | null,
+      stdout: string,
+      stderr: string,
+    ) => void,
+  ) => void;
 };
 
 const policy = (retries: number) =>

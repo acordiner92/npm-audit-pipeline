@@ -9,17 +9,23 @@ type ChildProcessResponse = {
   stderr: string;
 };
 
-const NpmAuditResponse = t.type({
-  metaData: t.type({
-    vulnerabilities: t.type({
-      info: t.number,
-      low: t.number,
-      moderate: t.number,
-      high: t.number,
-      critical: t.number,
-    }),
+const NpmAuditResponse = t.exact(
+  t.type({
+    metadata: t.exact(
+      t.type({
+        vulnerabilities: t.exact(
+          t.type({
+            info: t.number,
+            low: t.number,
+            moderate: t.number,
+            high: t.number,
+            critical: t.number,
+          }),
+        ),
+      }),
+    ),
   }),
-});
+);
 export type NpmAuditResponse = t.TypeOf<typeof NpmAuditResponse>;
 
 export const handleExecResponse = ({

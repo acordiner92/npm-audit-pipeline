@@ -34,7 +34,6 @@
   },
   "homepage": "https://github.com/acac99/npm-audit-pipeline#readme",
   "devDependencies": {
-    "@types/jest": "^27.0.1",
     "@typescript-eslint/eslint-plugin": "^4.29.2",
     "@typescript-eslint/parser": "^4.29.2",
     "chai": "^4.2.0",

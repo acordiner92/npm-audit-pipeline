@@ -15,7 +15,7 @@ describe('auditor', () => {
     };
 
     const npmResponse = {
-      metaData: {
+      metadata: {
         vulnerabilities: {
           info: 0,
           low: 10,
@@ -42,9 +42,9 @@ describe('auditor', () => {
         { ...config, critical: 1 },
         {
           ...npmResponse,
-          metaData: {
+          metadata: {
             vulnerabilities: {
-              ...npmResponse.metaData.vulnerabilities,
+              ...npmResponse.metadata.vulnerabilities,
               critical: 2,
             },
           },
