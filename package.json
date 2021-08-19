@@ -4,14 +4,10 @@
   "description": "Using npm audit in deployment pipelines",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./ --fix",
     "format": "prettier --write ./**/*",
     "test": "jest"
-  },
-  "engines": {
-    "npm": ">=6.0.0"
   },
   "keywords": [
     "pipeline",
@@ -21,7 +17,7 @@
     "package"
   ],
   "bin": {
-    "npm-audit": "./index.js"
+    "npm-audit": "./index.ts"
   },
   "repository": {
     "type": "git",
