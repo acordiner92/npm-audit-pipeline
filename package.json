@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "eslint ./ --fix",
+    "tsc": "tsc",
     "format": "prettier --write ./**/*",
     "test": "jest"
   },
