@@ -1,17 +1,18 @@
 import { flow, pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/TaskEither';
+import * as T from 'fp-ts/Task';
 import * as RT from 'fp-ts/ReaderTask';
 import * as IO from 'fp-ts/IO';
 import { info, error } from 'fp-ts/Console';
 import { NpmAuditorConfiguration, parseCommandLineArgs } from './argsParser';
 import { evaluateFailedVulnerabilities, LevelAudit } from './auditor';
 
-type AuditPipelineEnv = {
+export type AuditPipelineEnv = {
   getCommandLineArgs: () => ReadonlyArray<string>;
   runNpmAuditCommand: (config: NpmAuditorConfiguration) => TE.TaskEither<
     Error,
     {
-      metaData: {
+      metadata: {
         vulnerabilities: {
           info: number;
           low: number;
@@ -41,7 +42,7 @@ const writeVulnerabilityResultToTerminal = (
     );
   });
 
-export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, void> =>
+export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, IO.IO<void>> =>
   pipe(
     RT.ask<AuditPipelineEnv>(),
     RT.chainTaskK(env =>
@@ -62,12 +63,17 @@ export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, void> =>
               info(
                 `Failed to run npm audit pipeline - Reason: ${error.message}`,
               ),
-              env.exitProcess(1),
+              IO.chain(env.exitProcess(1)),
+              T.of,
             ),
-          flow(writeVulnerabilityResultToTerminal, failedVulnerabilities =>
-            failedVulnerabilities.length
-              ? env.exitProcess(1)
-              : env.exitProcess(0),
+          flow(
+            writeVulnerabilityResultToTerminal,
+            failedVulnerabilities =>
+              failedVulnerabilities.length
+                ? env.exitProcess(1)
+                : env.exitProcess(0),
+            IO.of,
+            T.of,
           ),
         ),
       ),
