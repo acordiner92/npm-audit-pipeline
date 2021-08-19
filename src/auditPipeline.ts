@@ -1,4 +1,4 @@
-import { flow, pipe } from 'fp-ts/lib/function';
+import { constant, constVoid, flow, pipe } from 'fp-ts/lib/function';
 import * as TE from 'fp-ts/TaskEither';
 import * as T from 'fp-ts/Task';
 import * as RT from 'fp-ts/ReaderTask';
@@ -6,6 +6,11 @@ import * as IO from 'fp-ts/IO';
 import { info, error } from 'fp-ts/Console';
 import { NpmAuditorConfiguration, parseCommandLineArgs } from './argsParser';
 import { evaluateFailedVulnerabilities, LevelAudit } from './auditor';
+
+export enum ExitStatus {
+  success = 0,
+  failed = 1,
+}
 
 export type AuditPipelineEnv = {
   getCommandLineArgs: () => ReadonlyArray<string>;
@@ -23,7 +28,6 @@ export type AuditPipelineEnv = {
       };
     }
   >;
-  exitProcess: (status: number) => never;
 };
 
 const writeVulnerabilityResultToTerminal = (
@@ -31,7 +35,6 @@ const writeVulnerabilityResultToTerminal = (
 ) =>
   failedVulnerabilities.map(x => {
     const { level, expectedCount, actualCount } = x;
-
     return pipe(
       error('\x1b[31m \x1b[40m NPM AUDIT FAILED'),
       IO.chain(() =>
@@ -42,7 +45,7 @@ const writeVulnerabilityResultToTerminal = (
     );
   });
 
-export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, IO.IO<void>> =>
+export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, ExitStatus> =>
   pipe(
     RT.ask<AuditPipelineEnv>(),
     RT.chainTaskK(env =>
@@ -61,19 +64,25 @@ export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, IO.IO<void>> =>
           error =>
             pipe(
               info(
-                `Failed to run npm audit pipeline - Reason: ${error.message}`,
+                `\x1b[31m \x1b[40m Failed to run npm audit pipeline - Reason: ${error.message}`,
               ),
-              IO.chain(env.exitProcess(1)),
-              T.of,
+              IO.map(constant(ExitStatus.failed)),
+              T.fromIO,
             ),
           flow(
-            writeVulnerabilityResultToTerminal,
-            failedVulnerabilities =>
-              failedVulnerabilities.length
-                ? env.exitProcess(1)
-                : env.exitProcess(0),
             IO.of,
-            T.of,
+            IO.chainFirst(
+              flow(writeVulnerabilityResultToTerminal, constVoid, IO.of),
+            ),
+            IO.chain(failedVulnerabilities =>
+              failedVulnerabilities.length
+                ? IO.of(ExitStatus.failed)
+                : pipe(
+                    info('NPM audit passed...'),
+                    IO.map(constant(ExitStatus.success)),
+                  ),
+            ),
+            T.fromIO,
           ),
         ),
       ),
