@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /* eslint-disable fp/no-unused-expression */
 /* eslint-disable fp/no-nil */
 import { exec } from 'child_process';
