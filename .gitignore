@@ -125,3 +125,6 @@ local.js
 
 # ignore merge artefacts
 *.orig
+
+
+dist

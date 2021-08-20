@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "lodash": "^3.10.1"
+  },
+  "bin": {
+    "npm-audit": "./dist/index.js"
+  }
+}

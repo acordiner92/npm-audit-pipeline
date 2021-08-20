@@ -1,0 +1,6 @@
+{
+    "watch": ["src"],
+    "ext": "ts,mjs,js,json",
+    "exec": "node -r esbuild-register index.js",
+    "legacyWatch": true
+  }

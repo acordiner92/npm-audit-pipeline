@@ -1,22 +1,24 @@
 {
-  "extends": ["airbnb-base", "plugin:prettier/recommended"],
-  "env": {
-    "es6": true,
-    "node": true,
-    "mocha": true
-  },
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 9,
-    "sourceType": "module"
+    "ecmaVersion": 2021,
+    "sourceType": "module",
+    "project": ["./tsconfig.json"]
   },
+  "plugins": ["fp"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:prettier/recommended",
+    "plugin:fp/recommended"
+  ],
   "rules": {
-    "arrow-body-style": "off",
-    "arrow-parens": "off",
-    "comma-dangle": "off",
-    "consistent-return": "off",
-    "indent": "off",
-    "prefer-template": "off",
-    "no-underscore-dangle": "off",
-    "function-paren-newline": 0
+    "@typescript-eslint/no-explicit-any": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "argsIgnorePattern": "^_" }
+    ],
+    "@typescript-eslint/no-floating-promises": "error"
   }
 }
