@@ -35,6 +35,38 @@ const writeVulnerabilityResultToTerminal = (
     );
   });
 
+const logResultToTerminal = (
+  result: TE.TaskEither<Error, readonly LevelAudit[]>,
+): T.Task<ExitStatus> =>
+  pipe(
+    result,
+    TE.fold(
+      error =>
+        pipe(
+          info(
+            `\x1b[31m \x1b[40m Failed to run npm audit pipeline - Reason: ${error.message}`,
+          ),
+          IO.map(constant(ExitStatus.failed)),
+          T.fromIO,
+        ),
+      flow(
+        IO.of,
+        IO.chainFirst(
+          flow(writeVulnerabilityResultToTerminal, constVoid, IO.of),
+        ),
+        IO.chain(failedVulnerabilities =>
+          failedVulnerabilities.length
+            ? IO.of(ExitStatus.failed)
+            : pipe(
+                info('NPM audit passed...'),
+                IO.map(constant(ExitStatus.success)),
+              ),
+        ),
+        T.fromIO,
+      ),
+    ),
+  );
+
 export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, ExitStatus> =>
   pipe(
     RT.ask<AuditPipelineEnv>(),
@@ -50,31 +82,7 @@ export const runAudit = (): RT.ReaderTask<AuditPipelineEnv, ExitStatus> =>
             TE.map(evaluateFailedVulnerabilities(config)),
           ),
         ),
-        TE.fold(
-          error =>
-            pipe(
-              info(
-                `\x1b[31m \x1b[40m Failed to run npm audit pipeline - Reason: ${error.message}`,
-              ),
-              IO.map(constant(ExitStatus.failed)),
-              T.fromIO,
-            ),
-          flow(
-            IO.of,
-            IO.chainFirst(
-              flow(writeVulnerabilityResultToTerminal, constVoid, IO.of),
-            ),
-            IO.chain(failedVulnerabilities =>
-              failedVulnerabilities.length
-                ? IO.of(ExitStatus.failed)
-                : pipe(
-                    info('NPM audit passed...'),
-                    IO.map(constant(ExitStatus.success)),
-                  ),
-            ),
-            T.fromIO,
-          ),
-        ),
+        logResultToTerminal,
       ),
     ),
   );
