@@ -24,11 +24,11 @@ const configLevelValues = (config: NpmAuditorConfiguration) => ({
 });
 
 const npmLevelValues = (npmAuditResponse: NpmAuditResponse) => ({
-  [Level.info]: npmAuditResponse.metadata.vulnerabilities.info,
-  [Level.low]: npmAuditResponse.metadata.vulnerabilities.low,
-  [Level.moderate]: npmAuditResponse.metadata.vulnerabilities.moderate,
-  [Level.high]: npmAuditResponse.metadata.vulnerabilities.high,
-  [Level.critical]: npmAuditResponse.metadata.vulnerabilities.critical,
+  [Level.info]: npmAuditResponse.info,
+  [Level.low]: npmAuditResponse.low,
+  [Level.moderate]: npmAuditResponse.moderate,
+  [Level.high]: npmAuditResponse.high,
+  [Level.critical]: npmAuditResponse.critical,
 });
 
 export const evaluateFailedVulnerabilities =

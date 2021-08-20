@@ -52,15 +52,11 @@ describe('runNpmAuditCommand', () => {
       const resp = await runNpmAuditCommand(config)(executorEnvMock)();
       expect(resp).toStrictEqual(
         E.right({
-          metadata: {
-            vulnerabilities: {
-              info: 5,
-              low: 10,
-              moderate: 2,
-              high: 0,
-              critical: 1,
-            },
-          },
+          info: 5,
+          low: 10,
+          moderate: 2,
+          high: 0,
+          critical: 1,
         }),
       );
     });

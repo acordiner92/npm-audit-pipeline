@@ -15,15 +15,11 @@ describe('auditor', () => {
     };
 
     const npmResponse = {
-      metadata: {
-        vulnerabilities: {
-          info: 0,
-          low: 10,
-          moderate: 0,
-          high: 0,
-          critical: 0,
-        },
-      },
+      info: 0,
+      low: 10,
+      moderate: 0,
+      high: 0,
+      critical: 0,
     };
 
     test.each([
@@ -42,12 +38,7 @@ describe('auditor', () => {
         { ...config, critical: 1 },
         {
           ...npmResponse,
-          metadata: {
-            vulnerabilities: {
-              ...npmResponse.metadata.vulnerabilities,
-              critical: 2,
-            },
-          },
+          critical: 2,
         },
         [
           {

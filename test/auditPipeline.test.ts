@@ -30,15 +30,11 @@ describe('auditPipeline', () => {
         getCommandLineArgs: () => ['--low=3'],
         runNpmAuditCommand: _config =>
           TE.right({
-            metadata: {
-              vulnerabilities: {
-                info: 0,
-                low: 4,
-                moderate: 0,
-                high: 0,
-                critical: 0,
-              },
-            },
+            info: 0,
+            low: 4,
+            moderate: 0,
+            high: 0,
+            critical: 0,
           }),
       };
 
@@ -51,15 +47,11 @@ describe('auditPipeline', () => {
         getCommandLineArgs: () => ['--low=3'],
         runNpmAuditCommand: _config =>
           TE.right({
-            metadata: {
-              vulnerabilities: {
-                info: 0,
-                low: 2,
-                moderate: 0,
-                high: 0,
-                critical: 0,
-              },
-            },
+            info: 0,
+            low: 2,
+            moderate: 0,
+            high: 0,
+            critical: 0,
           }),
       };
 

@@ -6,29 +6,19 @@ import * as IO from 'fp-ts/IO';
 import { info, error } from 'fp-ts/Console';
 import { NpmAuditorConfiguration, parseCommandLineArgs } from './argsParser';
 import { evaluateFailedVulnerabilities, LevelAudit } from './auditor';
+import { NpmAuditResponse } from './executorResponseHandler';
+
+export type AuditPipelineEnv = {
+  getCommandLineArgs: () => ReadonlyArray<string>;
+  runNpmAuditCommand: (
+    config: NpmAuditorConfiguration,
+  ) => TE.TaskEither<Error, NpmAuditResponse>;
+};
 
 export enum ExitStatus {
   success = 0,
   failed = 1,
 }
-
-export type AuditPipelineEnv = {
-  getCommandLineArgs: () => ReadonlyArray<string>;
-  runNpmAuditCommand: (config: NpmAuditorConfiguration) => TE.TaskEither<
-    Error,
-    {
-      metadata: {
-        vulnerabilities: {
-          info: number;
-          low: number;
-          moderate: number;
-          high: number;
-          critical: number;
-        };
-      };
-    }
-  >;
-};
 
 const writeVulnerabilityResultToTerminal = (
   failedVulnerabilities: ReadonlyArray<LevelAudit>,

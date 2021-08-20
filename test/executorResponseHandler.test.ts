@@ -55,15 +55,11 @@ describe('executorResponseHandler', () => {
         }),
       ).toStrictEqual(
         E.right({
-          metadata: {
-            vulnerabilities: {
-              info: 0,
-              low: 10,
-              moderate: 2,
-              high: 1,
-              critical: 6,
-            },
-          },
+          info: 0,
+          low: 10,
+          moderate: 2,
+          high: 1,
+          critical: 6,
         }),
       ));
   });

@@ -9,7 +9,7 @@ type ChildProcessResponse = {
   stderr: string;
 };
 
-const NpmAuditResponse = t.exact(
+const NpmAuditResponseRaw = t.exact(
   t.type({
     metadata: t.exact(
       t.type({
@@ -26,7 +26,14 @@ const NpmAuditResponse = t.exact(
     ),
   }),
 );
-export type NpmAuditResponse = t.TypeOf<typeof NpmAuditResponse>;
+
+export type NpmAuditResponse = {
+  info: number;
+  low: number;
+  moderate: number;
+  high: number;
+  critical: number;
+};
 
 export const handleExecResponse = ({
   stderr,
@@ -36,7 +43,14 @@ export const handleExecResponse = ({
     ? pipe(
         stdout,
         JSON.parse,
-        NpmAuditResponse.decode,
+        NpmAuditResponseRaw.decode,
         E.mapLeft(e => new Error(PathReporter.report(E.left(e)).join('\n'))),
+        E.map(x => ({
+          info: x.metadata.vulnerabilities.info,
+          low: x.metadata.vulnerabilities.low,
+          moderate: x.metadata.vulnerabilities.moderate,
+          high: x.metadata.vulnerabilities.high,
+          critical: x.metadata.vulnerabilities.critical,
+        })),
       )
     : E.left(new NpmResponseError('npm audit returned an error', stderr));
