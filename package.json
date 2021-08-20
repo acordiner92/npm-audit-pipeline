@@ -6,6 +6,7 @@
   "scripts": {
     "lint": "eslint ./src",
     "lint:fix": "eslint ./ --fix",
+    "build": "tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "format": "prettier --write ./**/*",
     "test": "jest"
@@ -18,7 +19,7 @@
     "package"
   ],
   "bin": {
-    "npm-audit": "./index.ts"
+    "npm-audit": "./dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -53,6 +54,7 @@
   "dependencies": {
     "fp-ts": "^2.11.1",
     "io-ts": "^2.2.16",
+    "lodash": "^3.10.1",
     "retry-ts": "^0.1.3"
   }
 }

@@ -32,7 +32,7 @@ const writeVulnerabilityResultToTerminal = (
           `\x1b[0m \x1b[33m For level: ${level}, the expected vulnerabilities should be ${expectedCount} but got ${actualCount}\n`,
         ),
       ),
-    );
+    )();
   });
 
 const logResultToTerminal = (
