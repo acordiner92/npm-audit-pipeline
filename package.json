@@ -7,7 +7,6 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./ --fix",
     "build": "tsc -p ./tsconfig.build.json",
-    "prepublish": "build",
     "tsc": "tsc",
     "format": "prettier --write ./**/*",
     "test": "jest"
