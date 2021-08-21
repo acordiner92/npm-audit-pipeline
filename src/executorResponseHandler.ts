@@ -42,7 +42,15 @@ export const handleExecResponse = ({
   !stderr || (stderr && stdout)
     ? pipe(
         stdout,
+        x => {
+          console.log('LOG', x);
+          return x;
+        },
         JSON.parse,
+        x => {
+          console.log('LOG AFTER', x);
+          return x;
+        },
         NpmAuditResponseRaw.decode,
         E.mapLeft(e => new Error(PathReporter.report(E.left(e)).join('\n'))),
         E.map(x => ({
