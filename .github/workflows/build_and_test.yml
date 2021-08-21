@@ -113,12 +113,9 @@ jobs:
       - name: link npm-audit-pipeline package
         run: yarn link npm-audit-pipeline
         working-directory: demo/yarn
-      - name: ls
-        run: ls
+      - name: yarn bin
+        run: yarn bin npm-audit-pipeline
         working-directory: demo/yarn/node_modules/.bin
-      - name: fix permission
-        run: sudo chmod +x node_modules/.bin/npm-audit-pipeline
-        working-directory: demo/yarn
       - name: run package-audit
         run: yarn package-audit
         working-directory: demo/yarn
