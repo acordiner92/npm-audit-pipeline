@@ -3,6 +3,7 @@ import * as E from 'fp-ts/Either';
 import * as TE from 'fp-ts/TaskEither';
 import * as RTE from 'fp-ts/ReaderTaskEither';
 import { pipe } from 'fp-ts/function';
+import { error } from 'fp-ts/lib/Console';
 import { NpmAuditorConfiguration } from './argsParser';
 import {
   handleExecResponse,
@@ -34,8 +35,8 @@ const execAsPromise = (
   command: string,
 ): Promise<ChildProcessResponse> =>
   new Promise((resolve, reject) =>
-    env.exec(command, (error, stdout, stderr) =>
-      error ? reject(error) : resolve({ stdout, stderr }),
+    env.exec(command, (err, stdout, stderr) =>
+      err ? pipe(error(err)(), () => reject(err)) : resolve({ stdout, stderr }),
     ),
   );
 export const runNpmAuditCommand = (
@@ -49,7 +50,7 @@ export const runNpmAuditCommand = (
         () =>
           pipe(
             TE.tryCatch(
-              () => execAsPromise(env, 'npm audit --json'),
+              () => execAsPromise(env, 'npme audit --json'),
               error =>
                 error instanceof Error
                   ? error
