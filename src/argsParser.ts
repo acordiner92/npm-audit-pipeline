@@ -2,7 +2,7 @@ import { flow, pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/Option';
 import * as E from 'fp-ts/Either';
 import { match } from 'fp-ts/boolean';
-import * as String from 'fp-ts/String';
+import * as String from 'fp-ts/string';
 import * as t from 'io-ts';
 import * as A from 'fp-ts/Array';
 import * as RA from 'fp-ts/ReadonlyArray';
