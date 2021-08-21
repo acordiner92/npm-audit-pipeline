@@ -57,15 +57,15 @@ jobs:
         run: npm run build
       - name: run npm link
         run: npm link
-      - name: npm i on demo
+      - name: npm i on demo/npm
         run: npm i
-        working-directory: demo
+        working-directory: demo/npm
       - name: link npm-audit-pipeline package
         run: npm link npm-audit-pipeline
-        working-directory: demo
+        working-directory: demo/npm
       - name: run package-audit
         run: npm run package-audit
-        working-directory: demo
+        working-directory: demo/npm
   dryRunLinuxPnpm:
     runs-on: ubuntu-latest
     steps:
@@ -82,16 +82,16 @@ jobs:
       - name: run build
         run: pnpm run build
       - name: run pnpm link
-        run: pnpm link ../
-      - name: pnpm i on demo
+        run: pnpm link .
+      - name: pnpm i on demo/pnpm
         run: pnpm i
-        working-directory: demo
+        working-directory: demo/pnpm
       - name: link npm-audit-pipeline package
         run: pnpm link npm-audit-pipeline
-        working-directory: demo
+        working-directory: demo/pnpm
       - name: run package-audit
         run: pnpm run package-audit
-        working-directory: demo
+        working-directory: demo/pnpm
   dryRunLinuxYarn:
     runs-on: ubuntu-latest
     steps:
@@ -109,15 +109,15 @@ jobs:
         run: yarn run build
       - name: run yarn link
         run: yarn link
-      - name: yarn install on demo
+      - name: yarn install on demo/yarn
         run: yarn install
-        working-directory: demo
+        working-directory: demo/yarn
       - name: link npm-audit-pipeline package
         run: yarn link npm-audit-pipeline
-        working-directory: demo
+        working-directory: demo/yarn
       - name: run package-audit
         run: yarn run package-audit
-        working-directory: demo
+        working-directory: demo/yarn
   dryRunMacOS:
     runs-on: macos-latest
     steps:
@@ -133,15 +133,15 @@ jobs:
         run: npm run build
       - name: run npm link
         run: npm link
-      - name: npm i on demo
+      - name: npm i on demo/npm
         run: npm i
-        working-directory: demo
+        working-directory: demo/npm
       - name: link npm-audit-pipeline package
         run: npm link npm-audit-pipeline
-        working-directory: demo
+        working-directory: demo/npm
       - name: run package-audit
         run: npm run package-audit
-        working-directory: demo
+        working-directory: demo/npm
   dryRunWindows:
     runs-on: windows-latest
     steps:
@@ -157,12 +157,12 @@ jobs:
         run: npm run build
       - name: run npm link
         run: npm link
-      - name: npm i on demo
+      - name: npm i on demo/npm
         run: npm i
-        working-directory: demo
+        working-directory: demo/npm
       - name: link npm-audit-pipeline package
         run: npm link npm-audit-pipeline
-        working-directory: demo
+        working-directory: demo/npm
       - name: run package-audit
         run: npm run package-audit
-        working-directory: demo
+        working-directory: demo/npm
