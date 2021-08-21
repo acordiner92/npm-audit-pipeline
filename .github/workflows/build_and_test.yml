@@ -56,4 +56,4 @@ jobs:
       - name: run build
         run: npm run build
       - name: run audit
-        run: node dist/index.js
+        run: npm run package-audit

@@ -9,7 +9,8 @@
     "build": "tsc -p ./tsconfig.build.json",
     "tsc": "tsc",
     "format": "prettier --write ./**/*",
-    "test": "jest"
+    "test": "jest",
+    "package-audit": "npm-audit"
   },
   "keywords": [
     "pipeline",
