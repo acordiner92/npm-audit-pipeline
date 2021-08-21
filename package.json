@@ -1,6 +1,6 @@
 {
   "name": "npm-audit-pipeline",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "Using npm audit in deployment pipelines",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,8 @@
     "tsc": "tsc",
     "format": "prettier --write ./**/*",
     "test": "jest",
-    "package-audit": "npm-audit"
+    "package-audit": "npm-audit",
+    "publish-package": "npm run build && npm publish"
   },
   "keywords": [
     "pipeline",
