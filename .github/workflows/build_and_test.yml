@@ -55,11 +55,9 @@ jobs:
         run: npm i
       - name: run build
         run: npm run build
-      - name: cd demo
-        run: cd demo
       - name: npm i on demo
         run: npm i
-      - name: npm i on demo
-        run: ls
+        working-directory: demo
       - name: run package-audit
         run: npm run package-audit
+        working-directory: demo
