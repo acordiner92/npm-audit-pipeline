@@ -81,13 +81,11 @@ jobs:
         run: pnpm i pnpm
       - name: run build
         run: pnpm run build
-      - name: run pnpm link
-        run: pnpm link .
       - name: pnpm i on demo/pnpm
         run: pnpm i
         working-directory: demo/pnpm
       - name: link npm-audit-pipeline package
-        run: pnpm link npm-audit-pipeline
+        run: pnpm link ../../
         working-directory: demo/pnpm
       - name: run package-audit
         run: pnpm run package-audit
@@ -109,11 +107,14 @@ jobs:
         run: yarn run build
       - name: run yarn link
         run: yarn link
+      - name: yarn install on demo/yarn
+        run: yarn install
+        working-directory: demo/yarn
       - name: link npm-audit-pipeline package
         run: yarn link npm-audit-pipeline
         working-directory: demo/yarn
-      - name: yarn install on demo/yarn
-        run: yarn install
+      - name: fix permission
+        run: sudo chmod +x node_modules/.bin/npm-audit-pipeline
         working-directory: demo/yarn
       - name: run package-audit
         run: yarn package-audit
