@@ -36,7 +36,9 @@ const execAsPromise = (
 ): Promise<ChildProcessResponse> =>
   new Promise((resolve, reject) =>
     env.exec(command, (err, stdout, stderr) =>
-      err ? pipe(error(err)(), () => reject(err)) : resolve({ stdout, stderr }),
+      err && !stdout
+        ? pipe(error(err)(), () => reject(err))
+        : resolve({ stdout, stderr }),
     ),
   );
 export const runNpmAuditCommand = (
