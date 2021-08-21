@@ -38,10 +38,12 @@ export type NpmAuditResponse = {
 export const handleExecResponse = ({
   stderr,
   stdout,
-}: ChildProcessResponse): E.Either<Error, NpmAuditResponse> =>
-  !stderr || stderr
+}: ChildProcessResponse): E.Either<Error, NpmAuditResponse> => {
+  console.log('stderr', stderr);
+  console.log('stdout', stdout);
+  return !stderr
     ? pipe(
-        stderr,
+        stdout,
         JSON.parse,
         NpmAuditResponseRaw.decode,
         E.mapLeft(e => new Error(PathReporter.report(E.left(e)).join('\n'))),
@@ -54,3 +56,4 @@ export const handleExecResponse = ({
         })),
       )
     : E.left(new NpmResponseError('npm audit returned an error', stderr));
+};
