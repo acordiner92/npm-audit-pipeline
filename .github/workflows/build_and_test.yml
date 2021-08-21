@@ -105,17 +105,14 @@ jobs:
         run: yarn install
       - name: run build
         run: yarn run build
-      - name: run yarn link
-        run: yarn link
+      - name: run npm link
+        run: npm link
       - name: yarn install on demo/yarn
         run: yarn install
         working-directory: demo/yarn
       - name: link npm-audit-pipeline package
-        run: yarn link npm-audit-pipeline
+        run: npm link npm-audit-pipeline
         working-directory: demo/yarn
-      - name: yarn bin
-        run: yarn bin npm-audit-pipeline
-        working-directory: demo/yarn/node_modules/.bin
       - name: run package-audit
         run: yarn package-audit
         working-directory: demo/yarn
