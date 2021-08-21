@@ -115,7 +115,7 @@ jobs:
         working-directory: demo/yarn
       - name: ls
         run: ls
-        working-directory: demo/yarn
+        working-directory: demo/yarn/node_modules/.bin
       - name: fix permission
         run: sudo chmod +x node_modules/.bin/npm-audit-pipeline
         working-directory: demo/yarn
