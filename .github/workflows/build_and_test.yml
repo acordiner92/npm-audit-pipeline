@@ -82,7 +82,7 @@ jobs:
       - name: run build
         run: pnpm run build
       - name: run pnpm link
-        run: pnpm link
+        run: pnpm link ../
       - name: pnpm i on demo
         run: pnpm i
         working-directory: demo
@@ -104,13 +104,13 @@ jobs:
       - name: install yarn
         run: npm i yarn -g
       - name: install dependencies
-        run: yarn i
+        run: yarn install
       - name: run build
         run: yarn run build
       - name: run yarn link
         run: yarn link
-      - name: yarn i on demo
-        run: yarn i
+      - name: yarn install on demo
+        run: yarn install
         working-directory: demo
       - name: link npm-audit-pipeline package
         run: yarn link npm-audit-pipeline
