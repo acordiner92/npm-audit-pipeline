@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "scripts": {
+    "package-audit": "npm-audit --package-manager=pnpm"
+  }
+}

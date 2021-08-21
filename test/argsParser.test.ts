@@ -15,6 +15,7 @@ describe('argsParser', () => {
           high: 0,
           critical: 0,
           retry: 3,
+          packageManager: 'npm',
         }),
       ));
 
@@ -41,6 +42,7 @@ describe('argsParser', () => {
           high: 0,
           critical: 0,
           retry: 3,
+          packageManager: 'npm',
         }),
       ));
 
@@ -54,6 +56,7 @@ describe('argsParser', () => {
           high: 0,
           critical: 0,
           retry: 3,
+          packageManager: 'npm',
         }),
       ));
 
@@ -67,7 +70,29 @@ describe('argsParser', () => {
           high: 0,
           critical: 0,
           retry: 5,
+          packageManager: 'npm',
         }),
       ));
+
+    test.each([
+      ['--package-manager=npm', 'npm'],
+      ['--package-manager=yarn', 'yarn'],
+      ['--package-manager=pnpm', 'pnpm'],
+    ])(
+      'if arg is has %s, then packageManager should be %s',
+      (command, expectedPackageManager) =>
+        expect(parseCommandLineArgs([command])).toStrictEqual(
+          E.right({
+            shouldWarn: false,
+            low: 0,
+            info: 0,
+            moderate: 0,
+            high: 0,
+            critical: 0,
+            retry: 3,
+            packageManager: expectedPackageManager,
+          }),
+        ),
+    );
   });
 });

@@ -7,6 +7,7 @@ import { error } from 'fp-ts/lib/Console';
 import { NpmAuditorConfiguration } from './argsParser';
 import {
   handleExecResponse,
+  handleExecYarnResponse,
   NpmAuditResponse,
 } from './executorResponseHandler';
 import { capDelay, exponentialBackoff, limitRetries, Monoid } from 'retry-ts';
@@ -52,13 +53,17 @@ export const runNpmAuditCommand = (
         () =>
           pipe(
             TE.tryCatch(
-              () => execAsPromise(env, 'npm audit --json'),
+              () => execAsPromise(env, `${config.packageManager} audit --json`),
               error =>
                 error instanceof Error
                   ? error
                   : new Error('Failed to execute child process command'),
             ),
-            TE.chainEitherK(handleExecResponse),
+            TE.chainEitherK(
+              config.packageManager === 'yarn'
+                ? handleExecYarnResponse
+                : handleExecResponse,
+            ),
           ),
         E.isLeft,
       ),

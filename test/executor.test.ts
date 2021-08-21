@@ -3,9 +3,10 @@
 import * as E from 'fp-ts/Either';
 import { ExecutorEnv, runNpmAuditCommand } from '../src/executor';
 import type { ExecException } from 'child_process';
+import { NpmAuditorConfiguration } from '../src/argsParser';
 
 describe('runNpmAuditCommand', () => {
-  const config = {
+  const config: NpmAuditorConfiguration = {
     shouldWarn: false,
     retry: 3,
     info: 0,
@@ -13,6 +14,7 @@ describe('runNpmAuditCommand', () => {
     moderate: 0,
     high: 0,
     critical: 0,
+    packageManager: 'npm',
   };
 
   describe(runNpmAuditCommand.name, () => {
@@ -50,6 +52,42 @@ describe('runNpmAuditCommand', () => {
         },
       };
       const resp = await runNpmAuditCommand(config)(executorEnvMock)();
+      expect(resp).toStrictEqual(
+        E.right({
+          info: 5,
+          low: 10,
+          moderate: 2,
+          high: 0,
+          critical: 1,
+        }),
+      );
+    });
+
+    it('A parse npm audit response is returned for yarn case', async () => {
+      const npmResponse = {
+        data: {
+          vulnerabilities: {
+            info: 5,
+            low: 10,
+            moderate: 2,
+            high: 0,
+            critical: 1,
+          },
+          dependencies: 535,
+          devDependencies: 0,
+          optionalDependencies: 0,
+          totalDependencies: 535,
+        },
+      };
+      const executorEnvMock: ExecutorEnv = {
+        exec: (_command, cb) => {
+          cb(null, JSON.stringify(npmResponse), '');
+        },
+      };
+      const resp = await runNpmAuditCommand({
+        ...config,
+        packageManager: 'yarn',
+      })(executorEnvMock)();
       expect(resp).toStrictEqual(
         E.right({
           info: 5,

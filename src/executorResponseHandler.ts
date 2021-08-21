@@ -27,6 +27,24 @@ const NpmAuditResponseRaw = t.exact(
   }),
 );
 
+const YarnAuditResponseRaw = t.exact(
+  t.type({
+    data: t.exact(
+      t.type({
+        vulnerabilities: t.exact(
+          t.type({
+            info: t.number,
+            low: t.number,
+            moderate: t.number,
+            high: t.number,
+            critical: t.number,
+          }),
+        ),
+      }),
+    ),
+  }),
+);
+
 export type NpmAuditResponse = {
   info: number;
   low: number;
@@ -35,6 +53,26 @@ export type NpmAuditResponse = {
   critical: number;
 };
 
+export const handleExecYarnResponse = ({
+  stderr,
+  stdout,
+}: ChildProcessResponse): E.Either<Error, NpmAuditResponse> =>
+  !stderr || (stderr && stdout)
+    ? pipe(
+        stdout,
+        JSON.parse, // TODO: trycatch this
+        YarnAuditResponseRaw.decode,
+        E.mapLeft(e => new Error(PathReporter.report(E.left(e)).join('\n'))),
+        E.map(x => ({
+          info: x.data.vulnerabilities.info,
+          low: x.data.vulnerabilities.low,
+          moderate: x.data.vulnerabilities.moderate,
+          high: x.data.vulnerabilities.high,
+          critical: x.data.vulnerabilities.critical,
+        })),
+      )
+    : E.left(new NpmResponseError('npm audit returned an error', stderr));
+
 export const handleExecResponse = ({
   stderr,
   stdout,
@@ -42,7 +80,7 @@ export const handleExecResponse = ({
   !stderr
     ? pipe(
         stdout,
-        JSON.parse,
+        JSON.parse, // TODO: trycatch this
         NpmAuditResponseRaw.decode,
         E.mapLeft(e => new Error(PathReporter.report(E.left(e)).join('\n'))),
         E.map(x => ({
