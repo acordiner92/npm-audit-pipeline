@@ -66,6 +66,58 @@ jobs:
       - name: run package-audit
         run: npm run package-audit
         working-directory: demo
+  dryRunLinuxPnpm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: install pnpm
+        run: npm i pnpm -g
+      - name: install dependencies
+        run: pnpm i pnpm
+      - name: run build
+        run: pnpm run build
+      - name: run pnpm link
+        run: pnpm link
+      - name: pnpm i on demo
+        run: pnpm i
+        working-directory: demo
+      - name: link npm-audit-pipeline package
+        run: pnpm link npm-audit-pipeline
+        working-directory: demo
+      - name: run package-audit
+        run: pnpm run package-audit
+        working-directory: demo
+  dryRunLinuxYarn:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: install yarn
+        run: npm i yarn -g
+      - name: install dependencies
+        run: yarn i
+      - name: run build
+        run: yarn run build
+      - name: run yarn link
+        run: yarn link
+      - name: yarn i on demo
+        run: yarn i
+        working-directory: demo
+      - name: link npm-audit-pipeline package
+        run: yarn link npm-audit-pipeline
+        working-directory: demo
+      - name: run package-audit
+        run: yarn run package-audit
+        working-directory: demo
   dryRunMacOS:
     runs-on: macos-latest
     steps:
