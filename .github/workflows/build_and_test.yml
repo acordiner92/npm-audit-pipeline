@@ -55,8 +55,13 @@ jobs:
         run: npm i
       - name: run build
         run: npm run build
+      - name: run npm link
+        run: npm link
       - name: npm i on demo
         run: npm i
+        working-directory: demo
+      - name: link npm-audit-pipeline package
+        run: npm link npm-audit-pipeline
         working-directory: demo
       - name: run package-audit
         run: npm run package-audit
