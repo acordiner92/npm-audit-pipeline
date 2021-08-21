@@ -39,7 +39,7 @@ export const handleExecResponse = ({
   stderr,
   stdout,
 }: ChildProcessResponse): E.Either<Error, NpmAuditResponse> =>
-  !stderr
+  !stderr || stderr
     ? pipe(
         stdout,
         JSON.parse,
