@@ -57,5 +57,7 @@ jobs:
         run: npm run build
       - name: cd demo
         run: cd demo
+      - name: npm i on demo
+        run: npm i
       - name: run package-audit
         run: npm run package-audit
