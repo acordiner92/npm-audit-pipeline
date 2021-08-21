@@ -116,7 +116,7 @@ jobs:
         run: yarn link npm-audit-pipeline
         working-directory: demo/yarn
       - name: run package-audit
-        run: yarn run package-audit
+        run: sudo yarn run package-audit
         working-directory: demo/yarn
   dryRunMacOS:
     runs-on: macos-latest
