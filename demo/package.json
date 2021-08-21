@@ -4,11 +4,5 @@
   },
   "scripts": {
     "package-audit": "npm-audit"
-  },
-  "bin": {
-    "npm-audit": "./dist/index.js"
-  },
-  "devDependencies": {
-    "npm-audit-pipeline": "^0.5.0"
   }
 }
