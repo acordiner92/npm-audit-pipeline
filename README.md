@@ -1,7 +1,7 @@
 # npm-audit-pipeline
 [![Build](https://github.com/acordiner92/npm-audit-pipeline/actions/workflows/build_and_test.yml/badge.svg?branch=master)](https://github.com/acordiner92/npm-audit-pipeline/actions/workflows/build_and_test.yml)
 
-Npm audit pipeline is an npm library that can be used in your CI piplelines to determine whether your packages have any vulnerabilities and failing over if so.
+Npm audit pipeline is an npm library that can be used in your CI piplelines to determine whether your packages have any vulnerabilities and failing over if so. It supports package manager's npm, yarn and pnpm
 
 ## Installation
 ```bash
@@ -36,7 +36,11 @@ $ npm-audit --shouldWarn
 $ npm-audit --retry=10
  ```
  retry flag means the number of retry attempts to fetch npm audit if it fails to retrieve the data
-
+ 
+```bash
+$ npm-audit --package-manager=yarn
+```
+package-manager flag means you can specify other package managers if your not using npm which is default. The current supported values are npm, yarn and pnpm. 
 ### License
 
 npm-audit-pipeline is [Apache 2.0](./LICENSE).
