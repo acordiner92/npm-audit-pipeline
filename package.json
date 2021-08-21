@@ -10,7 +10,8 @@
     "tsc": "tsc",
     "format": "prettier --write ./**/*",
     "test": "jest",
-    "package-audit": "npm-audit"
+    "package-audit": "npm-audit",
+    "publish-package": "npm run build && npm publish"
   },
   "keywords": [
     "pipeline",
