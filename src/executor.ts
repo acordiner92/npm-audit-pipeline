@@ -52,7 +52,7 @@ export const runNpmAuditCommand = (
         () =>
           pipe(
             TE.tryCatch(
-              () => execAsPromise(env, 'npm audit --json'),
+              () => execAsPromise(env, `${config.packageManager} audit --json`),
               error =>
                 error instanceof Error
                   ? error

@@ -1,8 +1,11 @@
-import { pipe } from 'fp-ts/lib/function';
+import { flow, pipe } from 'fp-ts/lib/function';
 import * as O from 'fp-ts/Option';
 import * as E from 'fp-ts/Either';
 import { match } from 'fp-ts/boolean';
+import * as String from 'fp-ts/String';
+import * as t from 'io-ts';
 import * as A from 'fp-ts/Array';
+import * as RA from 'fp-ts/ReadonlyArray';
 import { sequenceS } from 'fp-ts/Apply';
 
 export type NpmAuditorConfiguration = {
@@ -13,6 +16,7 @@ export type NpmAuditorConfiguration = {
   moderate: number;
   high: number;
   critical: number;
+  packageManager: 'npm' | 'yarn' | 'pnpm';
 };
 
 type VulnerabilityFlag = {
@@ -20,7 +24,14 @@ type VulnerabilityFlag = {
   count: number;
 };
 
+const packageManagerTypes = t.union([
+  t.literal('npm'),
+  t.literal('yarn'),
+  t.literal('pnpm'),
+]);
+
 const vulnerabilityFlagRegex = /^--(low|moderate|high|critical|retry)=[0-9]+$/;
+const packageManagerFlagRegex = /^--package-manager=(npm|yarn|pnpm)$/;
 
 const defaultConfig: NpmAuditorConfiguration = {
   shouldWarn: false,
@@ -30,6 +41,7 @@ const defaultConfig: NpmAuditorConfiguration = {
   moderate: 0,
   high: 0,
   critical: 0,
+  packageManager: 'npm',
 };
 
 const isArgsValid = (flagArg: string) =>
@@ -37,6 +49,9 @@ const isArgsValid = (flagArg: string) =>
 
 const isVulnerabilityFlag = (flagArg: string) =>
   new RegExp(vulnerabilityFlagRegex).test(flagArg);
+
+const isPackageManagerFlagRegex = (flagArg: string) =>
+  new RegExp(packageManagerFlagRegex).test(flagArg);
 
 const parseVulnerabilityFlagArg = (
   flagArg: string,
@@ -73,6 +88,36 @@ const parseVulnerabilityFlagArgs = (args: ReadonlyArray<string>) =>
     ),
   );
 
+const parsePackageManagerFlag =
+  (args: ReadonlyArray<string>) =>
+  (config: NpmAuditorConfiguration): E.Either<Error, NpmAuditorConfiguration> =>
+    pipe(
+      args.filter(isPackageManagerFlagRegex),
+      A.head,
+      O.fold(
+        () => E.right(config),
+        flow(
+          String.split('='),
+          RA.lookup(1),
+          E.fromOption(
+            () => new Error('Failed to parse command line arguments'),
+          ),
+          E.chain(
+            flow(
+              packageManagerTypes.decode,
+              E.mapLeft(
+                () => new Error('Failed to parse command line arguments'),
+              ),
+            ),
+          ),
+          E.map(x => ({
+            ...config,
+            packageManager: x,
+          })),
+        ),
+      ),
+    );
+
 const parseOtherFlagArgs =
   (args: ReadonlyArray<string>) => (config: NpmAuditorConfiguration) => ({
     ...config,
@@ -87,6 +132,11 @@ export const parseCommandLineArgs = (
     match(
       () => E.left(new Error('one of the arguments is invalid')),
       () =>
-        pipe(args, parseVulnerabilityFlagArgs, E.map(parseOtherFlagArgs(args))),
+        pipe(
+          args,
+          parseVulnerabilityFlagArgs,
+          E.chain(parsePackageManagerFlag(args)),
+          E.map(parseOtherFlagArgs(args)),
+        ),
     ),
   );

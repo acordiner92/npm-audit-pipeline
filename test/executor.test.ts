@@ -3,9 +3,10 @@
 import * as E from 'fp-ts/Either';
 import { ExecutorEnv, runNpmAuditCommand } from '../src/executor';
 import type { ExecException } from 'child_process';
+import { NpmAuditorConfiguration } from '../src/argsParser';
 
 describe('runNpmAuditCommand', () => {
-  const config = {
+  const config: NpmAuditorConfiguration = {
     shouldWarn: false,
     retry: 3,
     info: 0,
@@ -13,6 +14,7 @@ describe('runNpmAuditCommand', () => {
     moderate: 0,
     high: 0,
     critical: 0,
+    packageManager: 'npm',
   };
 
   describe(runNpmAuditCommand.name, () => {

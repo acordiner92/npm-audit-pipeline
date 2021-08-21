@@ -1,10 +1,11 @@
 /* eslint-disable fp/no-nil */
 /* eslint-disable fp/no-unused-expression */
+import { NpmAuditorConfiguration } from '../src/argsParser';
 import { evaluateFailedVulnerabilities, Level } from '../src/auditor';
 
 describe('auditor', () => {
   describe(evaluateFailedVulnerabilities.name, () => {
-    const config = {
+    const config: NpmAuditorConfiguration = {
       shouldWarn: false,
       retry: 3,
       info: 0,
@@ -12,6 +13,7 @@ describe('auditor', () => {
       moderate: 0,
       high: 0,
       critical: 0,
+      packageManager: 'npm',
     };
 
     const npmResponse = {
