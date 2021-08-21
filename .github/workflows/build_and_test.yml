@@ -42,3 +42,18 @@ jobs:
         run: npm i
       - name: run test
         run: npm run test
+  dryRun:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/package-lock.json') }}
+      - name: install dependencies
+        run: npm i
+      - name: run build
+        run: npm run build
+      - name: run audit
+        run: node dist/index.js
