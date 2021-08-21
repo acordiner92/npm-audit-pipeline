@@ -41,7 +41,7 @@ export const handleExecResponse = ({
 }: ChildProcessResponse): E.Either<Error, NpmAuditResponse> =>
   !stderr || stderr
     ? pipe(
-        stdout,
+        stderr,
         JSON.parse,
         NpmAuditResponseRaw.decode,
         E.mapLeft(e => new Error(PathReporter.report(E.left(e)).join('\n'))),
