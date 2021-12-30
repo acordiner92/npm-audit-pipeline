@@ -1,7 +1,6 @@
 /* eslint-disable fp/no-nil */
 /* eslint-disable fp/no-unused-expression */
 import * as E from 'fp-ts/Either';
-import { when } from 'jest-when';
 import { ExecutorEnv, runNpmAuditCommand } from '../src/executor';
 import type { ExecException } from 'child_process';
 import { NpmAuditorConfiguration } from '../src/argsParser';
