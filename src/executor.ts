@@ -34,7 +34,7 @@ const policy = (retries: number) =>
 const getCommand = (config: NpmAuditorConfiguration) => {
   if (config.packageManager === 'npm') {
     return process.platform === 'win32'
-      ? 'set "dir=%cd%" && cd / && npx npm --prefix %dir% audit --json'
+      ? 'set dir=%cd% && cd / && npx npm --prefix %dir% audit --json'
       : 'dir=$(pwd) && cd / && npx npm --prefix ${dir} audit --json';
   }
   return `${config.packageManager} audit --json`;
