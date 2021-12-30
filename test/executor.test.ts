@@ -1,6 +1,7 @@
 /* eslint-disable fp/no-nil */
 /* eslint-disable fp/no-unused-expression */
 import * as E from 'fp-ts/Either';
+import { when } from 'jest-when';
 import { ExecutorEnv, runNpmAuditCommand } from '../src/executor';
 import type { ExecException } from 'child_process';
 import { NpmAuditorConfiguration } from '../src/argsParser';
@@ -46,12 +47,15 @@ describe('runNpmAuditCommand', () => {
           totalDependencies: 535,
         },
       };
+
       const executorEnvMock: ExecutorEnv = {
         exec: (_command, cb) => {
           cb(null, JSON.stringify(npmResponse), '');
         },
       };
+
       const resp = await runNpmAuditCommand(config)(executorEnvMock)();
+
       expect(resp).toStrictEqual(
         E.right({
           info: 5,
@@ -79,15 +83,18 @@ describe('runNpmAuditCommand', () => {
           totalDependencies: 535,
         },
       };
+
       const executorEnvMock: ExecutorEnv = {
         exec: (_command, cb) => {
           cb(null, JSON.stringify(npmResponse), '');
         },
       };
+
       const resp = await runNpmAuditCommand({
         ...config,
         packageManager: 'yarn',
       })(executorEnvMock)();
+
       expect(resp).toStrictEqual(
         E.right({
           info: 5,
@@ -98,5 +105,68 @@ describe('runNpmAuditCommand', () => {
         }),
       );
     });
+  });
+
+  it('npm command is passed when npm package manager config is being used', async () => {
+    const npmResponse = {
+      data: {
+        vulnerabilities: {
+          info: 5,
+          low: 10,
+          moderate: 2,
+          high: 0,
+          critical: 1,
+        },
+        dependencies: 535,
+        devDependencies: 0,
+        optionalDependencies: 0,
+        totalDependencies: 535,
+      },
+    };
+    const executorEnvMock: ExecutorEnv = {
+      exec: jest.fn((_command, cb) => {
+        cb(null, JSON.stringify(npmResponse), '');
+      }),
+    };
+
+    const executorEnvSpy = jest.spyOn(executorEnvMock, 'exec');
+
+    await runNpmAuditCommand(config)(executorEnvMock)();
+
+    expect(executorEnvSpy.mock.calls[0][0]).toBe(
+      'dir=$(pwd) && cd / && npx npm --prefix ${dir} audit --json',
+    );
+  });
+
+  it('other command is passed when package manger config is not npm', async () => {
+    const npmResponse = {
+      data: {
+        vulnerabilities: {
+          info: 5,
+          low: 10,
+          moderate: 2,
+          high: 0,
+          critical: 1,
+        },
+        dependencies: 535,
+        devDependencies: 0,
+        optionalDependencies: 0,
+        totalDependencies: 535,
+      },
+    };
+    const executorEnvMock: ExecutorEnv = {
+      exec: jest.fn((_command, cb) => {
+        cb(null, JSON.stringify(npmResponse), '');
+      }),
+    };
+
+    const executorEnvSpy = jest.spyOn(executorEnvMock, 'exec');
+
+    await runNpmAuditCommand({
+      ...config,
+      packageManager: 'yarn',
+    })(executorEnvMock)();
+
+    expect(executorEnvSpy.mock.calls[0][0]).toBe('yarn audit --json');
   });
 });

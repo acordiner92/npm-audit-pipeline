@@ -31,6 +31,11 @@ export type ExecutorEnv = {
 const policy = (retries: number) =>
   capDelay(2000, Monoid.concat(exponentialBackoff(200), limitRetries(retries)));
 
+const getCommand = (config: NpmAuditorConfiguration) =>
+  config.packageManager === 'npm'
+    ? 'dir=$(pwd) && cd / && npx npm --prefix ${dir} audit --json'
+    : `${config.packageManager} audit --json`;
+
 const execAsPromise = (
   env: ExecutorEnv,
   command: string,
@@ -53,7 +58,7 @@ export const runNpmAuditCommand = (
         () =>
           pipe(
             TE.tryCatch(
-              () => execAsPromise(env, `${config.packageManager} audit --json`),
+              () => execAsPromise(env, getCommand(config)),
               error =>
                 error instanceof Error
                   ? error
@@ -69,3 +74,4 @@ export const runNpmAuditCommand = (
       ),
     ),
   );
+// "x=$(pwd) && cd / && npx npm --prefix ${x} audit --json"
