@@ -31,10 +31,14 @@ export type ExecutorEnv = {
 const policy = (retries: number) =>
   capDelay(2000, Monoid.concat(exponentialBackoff(200), limitRetries(retries)));
 
-const getCommand = (config: NpmAuditorConfiguration) =>
-  config.packageManager === 'npm'
-    ? 'dir=$(pwd) && cd / && npx npm --prefix ${dir} audit --json'
-    : `${config.packageManager} audit --json`;
+const getCommand = (config: NpmAuditorConfiguration) => {
+  if (config.packageManager === 'npm') {
+    return process.platform === 'win32'
+      ? 'set "dir=%cd%" && cd / && npx npm --prefix %dir% audit --json'
+      : 'dir=$(pwd) && cd / && npx npm --prefix ${dir} audit --json';
+  }
+  return `${config.packageManager} audit --json`;
+};
 
 const execAsPromise = (
   env: ExecutorEnv,
